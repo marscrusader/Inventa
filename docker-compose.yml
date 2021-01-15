@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5000:5000"
+    env_file: ./backend/.env
+    networks:
+      - inventa-network
+    command: ["yarn", "dev"]
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DB=${MONGO_DB}
+    depends_on:
+      - db
+  db:
+    image: postgres:12.3
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks: [dredd_backend]
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/:/usr/src/web
+      - /usr/src/web/node_modules
+    env_file: ./frontend/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - inventa-network
+    command: ["yarn", "dev"]
+
+networks:
+  inventa-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

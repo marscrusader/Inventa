@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": false,
+    "strict": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./backend",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "./types/*"
+      ]
+    }
+  },
+  "include": [
+    "./**/*",
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
