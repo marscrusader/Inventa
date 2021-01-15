@@ -22,7 +22,7 @@
     "declaration": true,
     "noUnusedLocals": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react"
   },
   "include": [
     "src/**/*"

@@ -36,6 +36,7 @@ services:
       - ./frontend/:/usr/src/web
       - /usr/src/web/node_modules
     env_file: ./frontend/.env
+    stdin_open: true
     ports:
       - "3000:3000"
     networks:
