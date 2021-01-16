@@ -16,18 +16,6 @@ services:
     command: ["yarn", "dev"]
     depends_on:
       - db
-  db:
-    image: postgres:12.3
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    networks:
-      - inventa_network
-    expose:
-      - 5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
   web:
     build:
       context: ./frontend
@@ -42,6 +30,24 @@ services:
     networks:
       - inventa_network
     command: ["yarn", "dev"]
+  db:
+    image: postgres:12.3
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - inventa_network
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  sqitch:
+    image: sqitch/sqitch
+    networks:
+      - inventa_network
+    volumes:
+      - ./migrations:/repo
 
 networks:
   inventa_network:

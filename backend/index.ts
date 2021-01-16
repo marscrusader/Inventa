@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import logger from './logger';
+import sequelize from './database'
 
 
 // Set up env
@@ -25,4 +26,12 @@ app.use('/', (req, res, next) => res.status(200).send({ hello: 'robot' }))
 // Start server
 app.listen(port, () => logger.debug(`Server is listening on port ${port}!`));
 
-// Connect to db
+// Make sure db is connected
+sequelize
+  .authenticate()
+  .then(() => {
+    logger.debug('DB connection has been established successfully.');
+  })
+  .catch(err => {
+    logger.error('Unable to connect to the database:', err);
+  });
