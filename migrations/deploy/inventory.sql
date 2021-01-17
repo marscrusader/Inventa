@@ -17,14 +17,15 @@ CREATE TABLE inventa.inventories
 (
   id integer NOT NULL DEFAULT nextval('inventa.inventories_id_seq'::regclass),
   "name" text NOT NULL,
-  "description" text NOT NULL,
+  "description" text,
   "category" character varying(50),
+  "collectionId" integer NOT NULL,
   "s3Id" text,
   "s3ThumbnailId" text,
   "serialNumber" text UNIQUE,
   "status" character varying(50),
-  "cost" text,
-  "salePrice" text,
+  "cost" integer,
+  "salePrice" integer,
   "createdAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT inventories_pkey PRIMARY KEY (id),
@@ -35,7 +36,11 @@ CREATE TABLE inventa.inventories
   CONSTRAINT "inventories_category_fkey" FOREIGN KEY ("category")
         REFERENCES inventa.categories ("name") MATCH SIMPLE
         ON UPDATE SET NULL
-        ON DELETE SET NULL
+        ON DELETE SET NULL,
+  CONSTRAINT "inventories_collection_fkey" FOREIGN KEY ("collectionId")
+        REFERENCES inventa.collections (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 -- Trigger update

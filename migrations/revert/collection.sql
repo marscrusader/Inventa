@@ -2,10 +2,9 @@
 
 BEGIN;
 
-DROP TABLE inventa.collections;
-DROP SEQUENCE inventa.collections_id_seq;
-
 DROP TABLE inventa.categories;
 DROP TABLE inventa.status;
+DROP TABLE inventa.collections;
+DROP SEQUENCE inventa.collections_id_seq;
 
 COMMIT;
