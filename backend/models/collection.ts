@@ -1,9 +1,10 @@
 import { DataTypes } from 'sequelize'
 import SequelizeSetup from '../database'
+import { CollectionStatic } from '../interfaces/collection'
 import UserModel from './user'
 
 // Model defined here is for type purpose, db models with migrations are defined in collection.sql
-const CollectionModel = SequelizeSetup.define('collections', {
+const CollectionModel: CollectionStatic = SequelizeSetup.define('collections', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true

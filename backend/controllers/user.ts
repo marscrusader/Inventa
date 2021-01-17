@@ -3,6 +3,7 @@ import { CreateUserRequest } from "../interfaces/user";
 import logger from "../logger";
 import UserModel from "../models/user";
 import auth0Client, { getAuth0Token } from "../services/auth0";
+import { validateForm } from "../utils/form";
 import { BaseController } from "./base";
 
 export default class UserController extends BaseController {
@@ -11,9 +12,11 @@ export default class UserController extends BaseController {
     const { firstName, lastName, email, password }: CreateUserRequest = req.body
 
     // 1) Validate form
-    if (!firstName || !lastName || !email || !password) {
-      logger.error('[CREATE_USER] Missing fields')
-      return this.clientError(res, "MISSING_FIELDS")
+    try {
+      validateForm({ firstName, lastName, email, password })
+    } catch (formError) {
+      logger.error('[CREATE_USER] Missing fields', formError)
+      return this.clientError(res)
     }
 
     // 2) Get Auth0 access token
@@ -21,8 +24,8 @@ export default class UserController extends BaseController {
     try {
       token = await getAuth0Token()
       logger.info('[CREATE_USER] Received Auth0 access token')
-    } catch (e) {
-      logger.error('[CREATE_USER] Failed to get auth token')
+    } catch (tokenError) {
+      logger.error('[CREATE_USER] Failed to get auth token', tokenError)
       return this.internalServerError(res)
     }
 
@@ -44,8 +47,8 @@ export default class UserController extends BaseController {
       )
       auth0Id = resp.data.user_id
       logger.info('[CREATE_USER] Successfully created user in Auth0')
-    } catch (error) {
-      logger.error('[CREATE_USER] Failed to create user in Auth0', error)
+    } catch (auth0Error) {
+      logger.error('[CREATE_USER] Failed to create user in Auth0', auth0Error)
       return this.internalServerError(res)
     }
 
@@ -58,8 +61,8 @@ export default class UserController extends BaseController {
         auth0Id
       })
       logger.info('[CREATE_USER] User successfully created, user id=', user.getDataValue("id"))
-    } catch (error) {
-      logger.error('[CREATE_USER] Failed to create user', error)
+    } catch (userError) {
+      logger.error('[CREATE_USER] Failed to create user', userError)
       return this.internalServerError(res)
     }
     return this.ok(res)

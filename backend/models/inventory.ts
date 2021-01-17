@@ -1,9 +1,10 @@
 import { DataTypes } from 'sequelize'
 import SequelizeSetup from '../database'
+import { InventoryStatic } from '../interfaces/inventory'
 import CollectionModel from './collection'
 
 // Model defined here is for type purpose, db models with migrations are defined in inventory.sql
-const InventoryModel = SequelizeSetup.define('inventories', {
+const InventoryModel: InventoryStatic = SequelizeSetup.define('inventories', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true

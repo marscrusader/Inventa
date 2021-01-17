@@ -1,9 +1,10 @@
 import { DataTypes } from 'sequelize'
 import SequelizeSetup from '../database'
+import { InventoryCategoryStatic } from '../interfaces/category'
 import CollectionModel from './collection'
 
 // Model defined here is for type purpose, db models with migrations are defined in collection.sql
-const CategoryModel = SequelizeSetup.define('categories', {
+const CategoryModel: InventoryCategoryStatic = SequelizeSetup.define('categories', {
   name: {
     type: DataTypes.TEXT,
     allowNull: false,

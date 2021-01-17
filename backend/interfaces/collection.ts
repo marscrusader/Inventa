@@ -15,3 +15,19 @@ export interface CollectionModelInterface extends Model<CollectionAttributes>, C
 export type CollectionStatic = typeof Model & {
   new(values?: Record<string, unknown>, options?: BuildOptions): CollectionModelInterface;
 };
+
+export interface CreateCollectionRequest {
+  name: string;
+  userId: number;
+  s3Id?: string;
+  s3ThumbnailId?: string
+}
+
+
+export interface UpdateCollectionRequest {
+  id: number;
+  name: string;
+  userId: number;
+  s3Id?: string;
+  s3ThumbnailId?: string
+}
