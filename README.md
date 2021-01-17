@@ -1,6 +1,4 @@
-# Cloud HR platform (Work In Progress)
-
-Backend is 80% complete, Frontend is 50% complete and still requires a good amount of work.
+# Inventory Management Platform (Work In Progress)
 
 ### Technology Stack
 - [ReactJs (Hooks)](https://reactjs.org/docs/hooks-intro.html) + [Typescript](https://www.typescriptlang.org/docs/), [MaterialUI](https://material-ui.com/)
