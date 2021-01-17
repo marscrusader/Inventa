@@ -1,11 +1,12 @@
-import { DataTypes } from 'sequelize/types'
+import { DataTypes } from 'sequelize'
 import SequelizeSetup from '../database'
 import CollectionModel from './collection'
 
 // Model defined here is for type purpose, db models with migrations are defined in inventory.sql
 const InventoryModel = SequelizeSetup.define('inventories', {
   id: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    primaryKey: true
   },
   name: {
     type: DataTypes.TEXT,

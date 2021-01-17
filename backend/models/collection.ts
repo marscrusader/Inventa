@@ -1,11 +1,12 @@
-import { DataTypes } from 'sequelize/types'
+import { DataTypes } from 'sequelize'
 import SequelizeSetup from '../database'
 import UserModel from './user'
 
 // Model defined here is for type purpose, db models with migrations are defined in collection.sql
 const CollectionModel = SequelizeSetup.define('collections', {
   id: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    primaryKey: true
   },
   name: {
     type: DataTypes.TEXT,
@@ -30,7 +31,7 @@ const CollectionModel = SequelizeSetup.define('collections', {
 }, {
   schema: 'inventa',
   tableName: 'collections'
-}) 
+})
 
-CollectionModel.belongsTo(UserModel, { foreignKey: 'userId'})
+CollectionModel.belongsTo(UserModel, { foreignKey: 'userId' })
 export default CollectionModel

@@ -19,7 +19,7 @@ CREATE TABLE inventa.users
   "firstName" text NOT NULL,
   "lastName" text NOT NULL,
   "email" character varying(255) NOT NULL UNIQUE,
-  "auth0Id" character NOT NULL,
+  "auth0Id" text NOT NULL,
   "createdAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT users_pkey PRIMARY KEY (id)

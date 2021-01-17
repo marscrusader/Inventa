@@ -1,10 +1,13 @@
-import { DataTypes } from 'sequelize/types'
+import { DataTypes } from 'sequelize'
 import SequelizeSetup from '../database'
+import { UserStatic } from '../interfaces/user'
 
 // Model defined here is for type purpose, db models with migrations are defined in user.sql
-const UserModel = SequelizeSetup.define('users', {
+const UserModel: UserStatic = SequelizeSetup.define('users', {
   id: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
   firstName: {
     type: DataTypes.TEXT,

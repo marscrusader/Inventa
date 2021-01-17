@@ -4,7 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import logger from './logger';
 import sequelize from './database'
-
+import userRoutes from './routes/user'
 
 // Set up env
 dotenv.config()
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
-app.use('/', (req, res, next) => res.status(200).send({ hello: 'robot' }))
+app.use('/user', userRoutes)
 
 // Start server
 app.listen(port, () => logger.debug(`Server is listening on port ${port}!`));
