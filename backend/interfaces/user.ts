@@ -9,6 +9,7 @@ export interface UserAttributes {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
 export interface UserModelInterface extends Model<UserAttributes>, UserAttributes { }
 
 export type UserStatic = typeof Model & {

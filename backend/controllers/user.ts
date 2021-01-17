@@ -12,6 +12,7 @@ export default class UserController extends BaseController {
 
     // 1) Validate form
     if (!firstName || !lastName || !email || !password) {
+      logger.error('[CREATE_USER] Missing fields')
       return this.clientError(res, "MISSING_FIELDS")
     }
 
@@ -19,12 +20,13 @@ export default class UserController extends BaseController {
     let token = ''
     try {
       token = await getAuth0Token()
+      logger.info('[CREATE_USER] Received Auth0 access token')
     } catch (e) {
       logger.error('[CREATE_USER] Failed to get auth token')
       return this.internalServerError(res)
     }
 
-    // 3) Use access token to create user in auth0
+    // 3) Use access token to create user in Auth0
     let auth0Id = ''
     try {
       const resp = await auth0Client.post(
@@ -60,6 +62,6 @@ export default class UserController extends BaseController {
       logger.error('[CREATE_USER] Failed to create user', error)
       return this.internalServerError(res)
     }
-    return this.ok(res, "HELLKO")
+    return this.ok(res)
   }
 }
