@@ -60,7 +60,7 @@ export default class UserController extends BaseController {
         email,
         auth0Id
       })
-      logger.info('[CREATE_USER] User successfully created, user id=', user.getDataValue("id"))
+      logger.info('[CREATE_USER] User successfully created, user id=', user.id)
     } catch (userError) {
       logger.error('[CREATE_USER] Failed to create user', userError)
       return this.internalServerError(res)

@@ -24,7 +24,7 @@ export default class CollectionController extends BaseController {
         s3Id,
         s3ThumbnailId
       })
-      logger.info('[CREATE_COLLECTION] Successfully created collection, id=', collection.getDataValue("id"))
+      logger.info('[CREATE_COLLECTION] Successfully created collection, id=', collection.id)
     } catch (collectionError) {
       logger.error('[CREATE_COLLECTION] Failed to create collection', collectionError)
       return this.internalServerError(res)

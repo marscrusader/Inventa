@@ -11,3 +11,8 @@ export interface InventoryCategoryModelInterface extends Model<InventoryCategory
 export type InventoryCategoryStatic = typeof Model & {
   new(values?: Record<string, unknown>, options?: BuildOptions): InventoryCategoryModelInterface;
 };
+
+export interface CreateCategoryRequest {
+  name: string;
+  collectionId: number;
+}
