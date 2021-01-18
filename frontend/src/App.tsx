@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import logo from './logo.svg'
+import './App.css'
+import { useAuth0 } from '@auth0/auth0-react'
+import LoginButton from '../components/common/loginButton'
+import LogoutButton from '../components/common/logoutButton'
 
-function App(): JSX.Element {
+export default function App(): JSX.Element {
+  const { isAuthenticated } = useAuth0()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          No
-        </a>
+    <div className='App'>
+      <header className='App-header'>
+        <img src={logo} className='App-logo' alt='logo' />
+        {
+          isAuthenticated ? <LogoutButton /> : <LoginButton />
+        }
       </header>
     </div>
-  );
+  )
 }
-
-export default App;

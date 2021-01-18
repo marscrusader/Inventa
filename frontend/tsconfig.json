@@ -22,7 +22,13 @@
     "declaration": true,
     "noUnusedLocals": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "include": [
     "src/**/*"
