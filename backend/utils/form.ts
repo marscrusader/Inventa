@@ -6,7 +6,7 @@ export const validateForm = (data: Record<string, any>, optionalFields?: string[
       if (optionalFields && optionalFields.includes(key)) {
         continue
       }
-      throw 'FORM_INCOMPLETE'
+      throw `FORM_INCOMPLETE, ${key} is missing`
     }
   }
 }

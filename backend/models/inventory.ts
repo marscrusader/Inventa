@@ -4,6 +4,7 @@ import { InventoryStatic } from '../interfaces/inventory'
 import CollectionModel from './collection'
 
 // Model defined here is for type purpose, db models with migrations are defined in inventory.sql
+// cost and salePrice are in cents
 const InventoryModel: InventoryStatic = SequelizeSetup.define('inventories', {
   id: {
     type: DataTypes.INTEGER,
