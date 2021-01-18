@@ -8,6 +8,9 @@ const collection = new CollectionController()
 // Routes from this point onwards requires user to be authenticated
 router.use(checkJwt)
 
+// List collections
+router.route('/list/:userId').get((req, res, next) => collection.list(req, res, next))
+
 // Create collection
 router.route('/create').post((req, res, next) => collection.create(req, res, next))
 

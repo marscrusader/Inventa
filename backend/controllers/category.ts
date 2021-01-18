@@ -6,6 +6,7 @@ import { validateForm } from "../utils/form";
 import { BaseController } from "./base";
 
 export default class CategoryController extends BaseController {
+  // START - list categories
   public async list(req: Request, res: Response, next: NextFunction) {
     const collectionId = req.params.collectionId
     logger.info('[LIST_CATEGORY] List category initiated for collection id=', collectionId)
@@ -31,7 +32,9 @@ export default class CategoryController extends BaseController {
       return this.internalServerError(res)
     }
   }
+  // END -list categories
 
+  // START - create category
   public async create(req: Request, res: Response, next: NextFunction) {
     logger.info('[CREATE_CATEGORY] Create category initiated', req.body)
     const { name, collectionId }: CreateCategoryRequest = req.body
@@ -58,7 +61,9 @@ export default class CategoryController extends BaseController {
 
     return this.ok(res)
   }
+  // END - create category
 
+  // START - delete category
   public async delete(req: Request, res: Response, next: NextFunction) {
     const name = req.params.name
     logger.info(`[DELETE_CATEGORY] Delete category initiated for name=${name}`)
@@ -81,4 +86,5 @@ export default class CategoryController extends BaseController {
     }
     return this.ok(res)
   }
+  // END - delete category
 }

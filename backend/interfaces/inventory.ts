@@ -32,5 +32,19 @@ export interface CreateInventoryRequest {
   serialNumber?: string;
   status?: string;
   cost?: number;
+  salePrice?: number;
+}
+
+export interface UpdateInventoryRequest {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  collectionId: number;
+  s3Id: string;
+  s3ThumbnailId: string;
+  serialNumber: string;
+  status: string;
+  cost: number;
   salePrice: number;
 }

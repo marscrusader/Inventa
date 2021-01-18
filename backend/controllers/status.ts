@@ -6,6 +6,7 @@ import { validateForm } from "../utils/form";
 import { BaseController } from "./base";
 
 export default class StatusController extends BaseController {
+  // START - list status
   public async list(req: Request, res: Response, next: NextFunction) {
     const collectionId = req.params.collectionId
     logger.info('[LIST_STATUS] List status initiated for collection id=', collectionId)
@@ -31,7 +32,9 @@ export default class StatusController extends BaseController {
       return this.internalServerError(res)
     }
   }
+  // END - list status
 
+  // START - create status
   public async create(req: Request, res: Response, next: NextFunction) {
     logger.info('[CREATE_STATUS] Create status initiated', req.body)
     const { name, collectionId }: CreateStatusRequest = req.body
@@ -58,7 +61,9 @@ export default class StatusController extends BaseController {
 
     return this.ok(res)
   }
+  // END - create status
 
+  // START - delete status
   public async delete(req: Request, res: Response, next: NextFunction) {
     const name = req.params.name
     logger.info(`[DELETE_STATUS] Delete status initiated for name=${name}`)
@@ -81,4 +86,5 @@ export default class StatusController extends BaseController {
     }
     return this.ok(res)
   }
+  // END - delete status
 }

@@ -7,6 +7,7 @@ import { validateForm } from "../utils/form";
 import { BaseController } from "./base";
 
 export default class UserController extends BaseController {
+  // START - create user
   public async create(req: Request, res: Response, next: NextFunction) {
     logger.info('[CREATE_USER] Create user initiated', req.body)
     const { firstName, lastName, email, password }: CreateUserRequest = req.body
@@ -67,4 +68,5 @@ export default class UserController extends BaseController {
     }
     return this.ok(res)
   }
+  // END - create user
 }
