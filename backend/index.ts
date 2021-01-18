@@ -6,6 +6,8 @@ import logger from './logger';
 import sequelize from './database'
 import userRoutes from './routes/user'
 import collectionRoutes from './routes/collection'
+import categoryRoutes from './routes/category'
+import statusRoutes from './routes/status'
 
 // Set up env
 dotenv.config()
@@ -24,6 +26,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Routes
 app.use('/user', userRoutes)
 app.use('/collection', collectionRoutes)
+app.use('/category', categoryRoutes)
+app.use('/status', statusRoutes)
+
 
 // Global unauthorized error handling
 app.use((err, req: Request, res: Response, next: NextFunction) => {

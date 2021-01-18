@@ -11,3 +11,8 @@ export interface InventoryStatusModelInterface extends Model<InventoryStatusAttr
 export type InventoryStatusStatic = typeof Model & {
   new(values?: Record<string, unknown>, options?: BuildOptions): InventoryStatusModelInterface;
 };
+
+export interface CreateStatusRequest {
+  name: string;
+  collectionId: number;
+}
