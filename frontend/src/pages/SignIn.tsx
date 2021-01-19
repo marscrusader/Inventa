@@ -1,7 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Link from '@material-ui/core/Link'
 import Paper from '@material-ui/core/Paper'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -12,19 +12,9 @@ import SideImage from '../static/sideImage.jpg'
 import { Divider } from '@material-ui/core'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
 import HowToRegOutlinedIcon from '@material-ui/icons/HowToRegOutlined'
+import { Routes } from '../interfaces/router'
+import { useAuth0 } from '@auth0/auth0-react';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide(): JSX.Element {
   const classes = useStyles()
+  const { loginWithRedirect } = useAuth0();
 
   return (
     <>
@@ -80,6 +71,7 @@ export default function SignInSide(): JSX.Element {
               color="primary"
               className={classes.submit}
               endIcon={<ExitToAppOutlinedIcon />}
+              onClick={() => loginWithRedirect()}
             >
               Sign In
             </Button>
@@ -96,6 +88,8 @@ export default function SignInSide(): JSX.Element {
               color="secondary"
               className={classes.submit}
               endIcon={<HowToRegOutlinedIcon />}
+              component={Link}
+              to={'/' + Routes.SIGN_UP}
             >
               Sign Up
             </Button>
