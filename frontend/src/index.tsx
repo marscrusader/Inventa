@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Auth0ProviderWithHistory from "./auth/auth0-provider";
+import SignUp from './pages/SignUp'
 
 ReactDOM.render(
   <Router>
     <Auth0ProviderWithHistory>
-      <App />
+      <Switch>
+        <Route exact path="/" component={App} />
+        <Route path="/create" component={SignUp} />
+      </Switch>
     </Auth0ProviderWithHistory>
   </Router>,
   document.getElementById('root')
