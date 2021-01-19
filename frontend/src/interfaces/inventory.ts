@@ -1,6 +1,15 @@
 export interface ListInventoryResponse {
   id: string;
   name: string;
+  category: string;
+  s3ThumbnailId: string;
+  serialNumber: string;
+  status: string;
+}
+
+export interface InventoryResponse {
+  id: string;
+  name: string;
   description: string;
   category: string;
   s3ThumbnailId: string;

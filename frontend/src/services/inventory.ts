@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { CreateInventoryRequest, ListInventoryResponse, UpdateInventoryRequest } from "../interfaces/inventory";
+import { CreateInventoryRequest, InventoryResponse, ListInventoryResponse, UpdateInventoryRequest } from "../interfaces/inventory";
 import ApiClient from "../utils/api";
 
 export const listInventory = async (token: string, collectionId: string): Promise<ListInventoryResponse[]> => {
@@ -12,7 +12,7 @@ export const listInventory = async (token: string, collectionId: string): Promis
   })).data
 }
 
-export const findInventory = async (token: string, inventoryId: string): Promise<ListInventoryResponse> => {
+export const findInventory = async (token: string, inventoryId: string): Promise<InventoryResponse> => {
   return (await ApiClient({
     method: 'GET',
     url: `/inventory/find/${inventoryId}`,

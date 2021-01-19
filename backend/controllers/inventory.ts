@@ -32,14 +32,10 @@ export default class InventoryController extends BaseController {
         return {
           id,
           name,
-          description,
           category,
           s3ThumbnailId,
           serialNumber,
-          status,
-          cost,
-          salePrice,
-          s3Id
+          status
         }
       }))
     } catch (listError) {
