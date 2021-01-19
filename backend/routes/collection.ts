@@ -15,7 +15,7 @@ router.route('/list/:userId').get((req, res, next) => collection.list(req, res, 
 router.route('/create').post((req, res, next) => collection.create(req, res, next))
 
 // Update collection
-router.route('/update').post((req, res, next) => collection.update(req, res, next))
+router.route('/update').put((req, res, next) => collection.update(req, res, next))
 
 // Delete collection
 router.route('/delete/:id').delete((req, res, next) => collection.delete(req, res, next))

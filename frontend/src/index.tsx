@@ -12,7 +12,7 @@ ReactDOM.render(
     <Auth0ProviderWithHistory>
       <Switch>
         <Route exact path="/" component={App} />
-        <Route path="/create" component={SignUp} />
+        <Route path="/signup" component={SignUp} />
       </Switch>
     </Auth0ProviderWithHistory>
   </Router>,

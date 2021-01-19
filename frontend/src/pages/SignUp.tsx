@@ -1,11 +1,8 @@
 import React from 'react'
-import CreateUserForm from '../components/CreateUser'
+import SignUpForm from '../components/SignUp'
 
 export default function SignUpPage(): JSX.Element {
   return (
-    <>
-      <h1>Sign up page</h1>
-      <CreateUserForm />
-    </>
+    <SignUpForm />
   )
 }
