@@ -4,7 +4,7 @@ import React from 'react'
 // defining interface here instead of interfaces file as nowhere else will be using this interface,
 // and the component is small
 interface LoadingButtonProps {
-  children: any[];
+  children: any;
   buttonStyle?: any;
   text: string;
   color: PropTypes.Color;

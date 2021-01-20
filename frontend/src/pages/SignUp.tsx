@@ -5,6 +5,9 @@ import { Typography, Link, makeStyles, Container, CssBaseline, Avatar, Grid, Tex
 import LoadingButton from '../components/common/LoadingButton'
 import { CreateUserFormInterface } from '../interfaces/user'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { createUser } from '../services/user'
+import SimpleDialog from '../components/common/SimpleDialog'
+import { useAuth0 } from '@auth0/auth0-react'
 
 
 function Copyright() {
@@ -42,6 +45,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUpPage(): JSX.Element {
   const classes = useStyles()
+  const { loginWithRedirect } = useAuth0();
+
+  const [dialogState, setDialogState] = useState({
+    title: '',
+    description: '',
+    isError: false,
+    showDialog: false,
+    submitButtonText: ''
+  })
+  const handleDialogSubmit = () => {
+    if (dialogState.isError) {
+      handleCloseDialog()
+      return
+    }
+    loginWithRedirect()
+  }
+  const handleCloseDialog = () => {
+    setDialogState({
+      ...dialogState,
+      showDialog: false
+    })
+  }
 
   const [state, setState] = useState({
     firstName: '',
@@ -55,18 +80,47 @@ export default function SignUpPage(): JSX.Element {
     Logger.info("[CREATE_USER] Form submission triggered", state)
     e.preventDefault()
     setSubmitLoading(true)
-    // try {
-    //   await createUser(state)
-    // } catch (error) {
-    //   logger.error('[CREATE_USER] Failed to create new staff', error)
-    // } finally {
-    //   setSubmitLoading(false)
-    // }
+    try {
+      await createUser(state)
+      setDialogState({
+        title: 'Successfully signed up',
+        description: 'You have successfully signed up! Proceed to sign in now by clicking on the button below.',
+        submitButtonText: 'Sign In',
+        showDialog: true,
+        isError: false
+      })
+    } catch (error) {
+      Logger.error('[CREATE_USER] Failed to create new staff', error)
+      let errorDescription = 'An unexpected error has occured, please contact a developer or an administrator. We apologize for the inconvenience caused.'
+      if (error.response && error.response.status === 400) {
+        errorDescription = 'An error has occured, please make sure that the form is correctly filled up. First name, last name, email address, and password are required fields.'
+      }
+      setDialogState({
+        title: 'Error signing up',
+        description: errorDescription,
+        submitButtonText: 'Close',
+        showDialog: true,
+        isError: true
+      })
+    } finally {
+      setSubmitLoading(false)
+    }
   }
+
   return (
     <>
       <BlankNavbar />
       <Container component="main" maxWidth="xs">
+        <SimpleDialog
+          title={dialogState.title}
+          description={dialogState.description}
+          submitButtonText={dialogState.submitButtonText}
+          showDialog={dialogState.showDialog}
+          cancelButtonText=""
+          onSubmitClick={handleDialogSubmit}
+          onCancelClick={handleCloseDialog}
+          onCloseDialog={handleCloseDialog}
+        />
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -143,7 +197,7 @@ export default function SignUpPage(): JSX.Element {
             </LoadingButton>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link href="/signin" variant="body2">
                   Already have an account? Sign in
               </Link>
               </Grid>
