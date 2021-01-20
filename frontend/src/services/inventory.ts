@@ -7,7 +7,7 @@ export const listInventory = async (token: string, collectionId: string): Promis
     method: 'GET',
     url: `/inventory/list/${collectionId}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })).data
 }
@@ -17,7 +17,7 @@ export const findInventory = async (token: string, inventoryId: string): Promise
     method: 'GET',
     url: `/inventory/find/${inventoryId}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })).data
 }
@@ -27,7 +27,7 @@ export const createInventory = async (token: string, data: CreateInventoryReques
     method: 'POST',
     url: '/inventory/create',
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
     data
   }))
@@ -38,7 +38,7 @@ export const updateInventory = async (token: string, data: UpdateInventoryReques
     method: 'PUT',
     url: '/inventory/update',
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
     data
   }))
@@ -49,7 +49,7 @@ export const deleteInventory = async (token: string, inventoryId: string): Promi
     method: 'DELETE',
     url: `/inventory/delete/${inventoryId}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   }))
 }

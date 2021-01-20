@@ -7,7 +7,7 @@ export const listStatus = async (token: string, collectionId: string): Promise<L
     method: 'GET',
     url: `/status/list/${collectionId}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })).data
 }
@@ -17,7 +17,7 @@ export const createStatus = async (token: string, data: CreateStatusRequest): Pr
     method: 'POST',
     url: `/status/create`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
     data
   }))
@@ -28,7 +28,7 @@ export const deleteStatus = async (token: string, statusName: string): Promise<A
     method: 'DELETE',
     url: `/status/delete/${statusName}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   }))
 }

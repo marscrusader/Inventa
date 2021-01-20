@@ -7,7 +7,7 @@ export const listCategories = async (token: string, collectionId: string): Promi
     method: 'GET',
     url: `/category/list/${collectionId}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })).data
 }
@@ -17,7 +17,7 @@ export const createCategory = async (token: string, data: CreateCategoryRequest)
     method: 'POST',
     url: `/category/create`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
     data
   }))
@@ -28,7 +28,7 @@ export const deleteCategory = async (token: string, categoryName: string): Promi
     method: 'DELETE',
     url: `/category/delete/${categoryName}`,
     headers: {
-      authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   }))
 }

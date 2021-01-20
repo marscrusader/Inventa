@@ -7,6 +7,33 @@ import { validateForm } from "../utils/form";
 import { BaseController } from "./base";
 
 export default class UserController extends BaseController {
+  // START - find user
+  public async find(req: Request, res: Response, next: NextFunction) {
+    const email = req.params.email
+    logger.info('[FIND_USER] Find user initiated for user email=', email)
+    if (!email) {
+      logger.error('[FIND_USER] Missing user email')
+      return this.clientError(res)
+    }
+    try {
+      const user = await UserModel.findOne({
+        where: {
+          email
+        },
+        attributes: ['id', 'firstName', 'lastName']
+      })
+      return this.ok(res, {
+        id: user?.id,
+        firstName: user?.firstName,
+        lastName: user?.lastName
+      })
+    } catch (error) {
+      logger.error(`[FIND_USER] Failed to get user with email=${email}`, error)
+      return this.internalServerError(res)
+    }
+  }
+  // END - find user
+
   // START - create user
   public async create(req: Request, res: Response, next: NextFunction) {
     logger.info('[CREATE_USER] Create user initiated', req.body)

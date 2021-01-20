@@ -34,10 +34,13 @@ app.use('/inventory', inventoryRoutes)
 
 // Global unauthorized error handling
 app.use((err, req: Request, res: Response, next: NextFunction) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(err.status).send({ message: err.message })
-    logger.error(err)
-    return
+  if (err) {
+    logger.error('Unexpected error while verifying jwt', err)
+    if (err.name === 'UnauthorizedError') {
+      res.status(err.status).send({ message: err.message })
+      logger.error(err)
+      return
+    }
   }
   next()
 });

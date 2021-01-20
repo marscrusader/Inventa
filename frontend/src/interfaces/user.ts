@@ -4,3 +4,9 @@ export interface CreateUserFormInterface {
   email: string;
   password: string;
 }
+
+export interface GetUserResponse {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
