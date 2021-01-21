@@ -40,6 +40,7 @@ import Snackbar from './common/Snackbar'
 import { useDashboardStyles } from '../styles/dashboard'
 import EmptyImage from '../static/empty.jpg'
 import { useDialogState } from '../state/dialogState'
+import { useSnackbarState } from '../state/snackbarState'
 
 
 function Copyright() {
@@ -71,7 +72,7 @@ export default function Dashboard(): JSX.Element {
   }
 
   // Drawer state
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = useState(true)
   const handleDrawerOpen = () => {
     setOpen(true)
   }
@@ -90,14 +91,7 @@ export default function Dashboard(): JSX.Element {
   const [dialogState, setDialogState, setDialogError, handleDialogSubmit, handleCloseDialog] = useDialogState()
 
   // Snackbar state
-  const snackbarInitState = {
-    showSnackbar: false,
-    message: ''
-  }
-  const [snackbarState, setSnackbarState] = useState(snackbarInitState)
-  const closeSnackbar = () => {
-    setSnackbarState(snackbarInitState)
-  }
+  const [snackbarState, setSnackbarState, closeSnackbar] = useSnackbarState()
 
   // Collections state
   const [collectionsState, setCollectionsState] = useState([] as ListCollectionResponse[])

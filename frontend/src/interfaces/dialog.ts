@@ -20,9 +20,3 @@ export interface DialogStateInterface {
   showDialog: boolean;
   submitButtonText: string;
 }
-
-export interface SnackbarInterface {
-  showSnackbar: boolean;
-  message: string;
-  onClose: (event?: React.SyntheticEvent, reason?: string) => void;
-}
