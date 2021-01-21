@@ -13,6 +13,14 @@ export interface SimpleDialogInterface {
   onCloseDialog?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
+export interface DialogStateInterface {
+  title: string;
+  description: string;
+  isError: boolean;
+  showDialog: boolean;
+  submitButtonText: string;
+}
+
 export interface SnackbarInterface {
   showSnackbar: boolean;
   message: string;

@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Drawer from '@material-ui/core/Drawer'
 import Box from '@material-ui/core/Box'
@@ -21,19 +20,26 @@ import Link from '@material-ui/core/Link'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import isMobile from '../utils/isMobile'
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from '@material-ui/core/Avatar'
 import Inventories from './Inventory'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Redirect } from 'react-router-dom'
 import { Routes } from '../interfaces/router'
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined'
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Logger from 'loglevel'
 import { getUser } from '../services/user'
 import SimpleDialog from './common/SimpleDialog'
-import { listCollections } from '../services/collection'
-import { ListCollectionResponse } from '../interfaces/collection'
+import { createCollection, listCollections } from '../services/collection'
+import { CollectionDialogInterface, ListCollectionResponse } from '../interfaces/collection'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Button from '@material-ui/core/Button'
+import CollectionDialog from './collection/CollectionDialog'
+import Snackbar from './common/Snackbar'
+import { useDashboardStyles } from '../styles/dashboard'
+import EmptyImage from '../static/empty.jpg'
+import { useDialogState } from '../state/dialogState'
 
 
 function Copyright() {
@@ -49,104 +55,8 @@ function Copyright() {
   )
 }
 
-const drawerWidth = 240
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
-  },
-  linkTag: {
-    color: 'white',
-    textDecoration: 'none',
-    fontWeight: 'bold'
-  },
-  signOutListItem: {
-    color: '#D90429'
-  },
-  newCollectionListItem: {
-    color: theme.palette.secondary.dark
-  },
-  avatarListIcon: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-  }
-}))
-
 export default function Dashboard(): JSX.Element {
-  const classes = useStyles()
+  const classes = useDashboardStyles()
 
   // Auth state
   const { isAuthenticated, isLoading, user, logout, getAccessTokenSilently } = useAuth0()
@@ -171,44 +81,36 @@ export default function Dashboard(): JSX.Element {
 
   // User state
   const [userState, setUserState] = useState({
-    id: '',
+    id: 0,
     firstName: '',
     lastName: ''
   })
 
   // Dialog state
-  const [dialogState, setDialogState] = useState({
-    title: '',
-    description: '',
-    isError: false,
-    showDialog: false,
-    submitButtonText: ''
-  })
-  const handleDialogSubmit = () => {
-    if (dialogState.isError) {
-      handleCloseDialog()
-      return
-    }
+  const [dialogState, setDialogState, setDialogError, handleDialogSubmit, handleCloseDialog] = useDialogState()
+
+  // Snackbar state
+  const snackbarInitState = {
+    showSnackbar: false,
+    message: ''
   }
-  const handleCloseDialog = () => {
-    setDialogState({
-      ...dialogState,
-      showDialog: false
-    })
-  }
-  const setDialogError = () => {
-    setDialogState({
-      title: 'Error',
-      description: 'An unexpected error has occured, please contact a developer or an administrator. We apologize for the inconvenience caused.',
-      isError: true,
-      showDialog: true,
-      submitButtonText: 'Close'
-    })
+  const [snackbarState, setSnackbarState] = useState(snackbarInitState)
+  const closeSnackbar = () => {
+    setSnackbarState(snackbarInitState)
   }
 
   // Collections state
   const [collectionsState, setCollectionsState] = useState([] as ListCollectionResponse[])
-  const getCollections = async (token: string, userId: string) => {
+  const [collectionDialogState, setCollectionDialogState] = useState({
+    title: '',
+    collectionName: '',
+    description: '',
+    submitButtonText: '',
+    showDialog: false,
+    submitButtonLoading: false,
+    submitButtonDisabled: false,
+  } as CollectionDialogInterface)
+  const getCollections = async (token: string, userId: number) => {
     try {
       const collections = await listCollections(token, userId)
       setCollectionsState(collections)
@@ -217,6 +119,59 @@ export default function Dashboard(): JSX.Element {
       setDialogError()
     } finally {
       setPageLoadingState(false)
+    }
+  }
+  const closeCollectionDialog = () => {
+    setCollectionDialogState({
+      ...collectionDialogState,
+      showDialog: false
+    })
+  }
+  const openCreateCollectionDialog = () => {
+    setCollectionDialogState({
+      ...collectionDialogState,
+      collectionName: '',
+      title: 'Create a new collection',
+      description: 'Enter the name of the collection and click on the "Create" button',
+      submitButtonText: 'Create',
+      showDialog: true
+    })
+  }
+  const onCollectionNameChange = (collectionName: string) => {
+    setCollectionDialogState({
+      ...collectionDialogState,
+      collectionName
+    })
+  }
+  const addNewCollection = async () => {
+    setCollectionDialogState({
+      ...collectionDialogState,
+      submitButtonLoading: true,
+      submitButtonDisabled: true
+    })
+    // 1) Get the access token
+    const token = await getAccessToken()
+    // 2) Create collection
+    try {
+      await createCollection(token, {
+        name: collectionDialogState.collectionName,
+        userId: userState.id
+      })
+      getCollections(token, userState.id)
+      setSnackbarState({
+        showSnackbar: true,
+        message: 'Collection created.'
+      })
+    } catch (addCollectionError) {
+      Logger.error('[ADD_COLLECTION] Failed to add new collection', addCollectionError)
+      setDialogError()
+    } finally {
+      setCollectionDialogState({
+        ...collectionDialogState,
+        showDialog: false,
+        submitButtonLoading: false,
+        submitButtonDisabled: false
+      })
     }
   }
 
@@ -229,11 +184,27 @@ export default function Dashboard(): JSX.Element {
       )
     } else if (pageLoadingState) {
       return (
-        <h1>Loading ...</h1>
+        <>
+          <Typography className={classes.loading} component="h1" variant="h5" color="inherit" noWrap>
+            <span>Loading ...</span>
+          </Typography>
+          <LinearProgress />
+        </>
       )
     } else if (!collectionsState.length) {
       return (
-        <h1>Collections empty</h1>
+        <>
+          <img src={EmptyImage} className={classes.emptyImage} />
+          <Button
+            className={classes.newCollectionButton}
+            variant="contained"
+            color="primary"
+            startIcon={<AddCircleOutlineOutlinedIcon />}
+            onClick={() => { openCreateCollectionDialog() }}
+          >
+            New Collection
+          </Button>
+        </>
       )
     }
     return (<Inventories />)
@@ -359,6 +330,23 @@ export default function Dashboard(): JSX.Element {
           onSubmitClick={handleDialogSubmit}
           onCancelClick={handleCloseDialog}
           onCloseDialog={handleCloseDialog}
+        />
+        <Snackbar
+          showSnackbar={snackbarState.showSnackbar}
+          message={snackbarState.message}
+          onClose={() => { closeSnackbar() }}
+        />
+        <CollectionDialog
+          title={collectionDialogState.title}
+          showDialog={collectionDialogState.showDialog}
+          description={collectionDialogState.description}
+          submitButtonText={collectionDialogState.submitButtonText}
+          submitButtonLoading={collectionDialogState.submitButtonLoading}
+          submitButtonDisabled={collectionDialogState.submitButtonDisabled}
+          collectionName={collectionDialogState.collectionName}
+          onCollectionNameChange={(val) => { onCollectionNameChange(val) }}
+          onSubmitClick={() => addNewCollection()}
+          onCancelClick={() => closeCollectionDialog()}
         />
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

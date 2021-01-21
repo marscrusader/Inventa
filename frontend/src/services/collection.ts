@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios"
 import { CreateCollectionRequest, ListCollectionResponse, UpdateCollectionRequest } from "../interfaces/collection"
 import ApiClient from "../utils/api"
 
-export const listCollections = async (token: string, userId: string): Promise<ListCollectionResponse[]> => {
+export const listCollections = async (token: string, userId: number): Promise<ListCollectionResponse[]> => {
   return (await ApiClient({
     method: 'GET',
     url: `/collection/list/${userId}`,

@@ -6,7 +6,7 @@ export interface CreateUserFormInterface {
 }
 
 export interface GetUserResponse {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
 }
