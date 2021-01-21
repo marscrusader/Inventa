@@ -33,3 +33,13 @@ export interface CollectionDialogInterface {
   onSubmitClick: React.MouseEventHandler<HTMLButtonElement>;
   onCancelClick: React.MouseEventHandler<HTMLButtonElement>;
 }
+
+export interface CollectionDialogStateInterface {
+  title: string;
+  collectionName: string;
+  description: string;
+  submitButtonText: string;
+  showDialog: boolean;
+  submitButtonLoading: boolean;
+  submitButtonDisabled: boolean;
+}

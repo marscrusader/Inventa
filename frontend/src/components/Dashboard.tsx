@@ -1,38 +1,21 @@
 
 import React, { useEffect, useState } from 'react'
-import clsx from 'clsx'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Drawer from '@material-ui/core/Drawer'
 import Box from '@material-ui/core/Box'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import IconButton from '@material-ui/core/IconButton'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
-import MenuIcon from '@material-ui/icons/Menu'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import isMobile from '../utils/isMobile'
-import Avatar from '@material-ui/core/Avatar'
 import Inventories from './Inventory'
-import { useAuth0 } from '@auth0/auth0-react'
 import { Redirect } from 'react-router-dom'
 import { Routes } from '../interfaces/router'
-import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined'
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
-import ListSubheader from '@material-ui/core/ListSubheader'
 import Logger from 'loglevel'
 import { getUser } from '../services/user'
 import SimpleDialog from './common/SimpleDialog'
 import { createCollection, listCollections } from '../services/collection'
-import { CollectionDialogInterface, ListCollectionResponse } from '../interfaces/collection'
+import { ListCollectionResponse } from '../interfaces/collection'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import CollectionDialog from './collection/CollectionDialog'
@@ -41,6 +24,10 @@ import { useDashboardStyles } from '../styles/dashboard'
 import EmptyImage from '../static/empty.jpg'
 import { useDialogState } from '../state/dialogState'
 import { useSnackbarState } from '../state/snackbarState'
+import { useCollectionDialogState } from '../state/collectionDialogState'
+import { useUserState } from '../state/user'
+import AppBar from './AppBar'
+import Drawer from './Drawer'
 
 
 function Copyright() {
@@ -59,17 +46,16 @@ function Copyright() {
 export default function Dashboard(): JSX.Element {
   const classes = useDashboardStyles()
 
-  // Auth state
-  const { isAuthenticated, isLoading, user, logout, getAccessTokenSilently } = useAuth0()
-  const getAccessToken = async () => {
-    try {
-      const token = await getAccessTokenSilently()
-      return token
-    } catch (tokenError) {
-      Logger.error('Get token error', tokenError)
-      return ''
-    }
-  }
+  // User state
+  const [
+    isAuthenticated,
+    isLoading,
+    user,
+    logout,
+    getAccessToken,
+    userState,
+    setUserState
+  ] = useUserState()
 
   // Drawer state
   const [open, setOpen] = useState(true)
@@ -80,13 +66,6 @@ export default function Dashboard(): JSX.Element {
     setOpen(false)
   }
 
-  // User state
-  const [userState, setUserState] = useState({
-    id: 0,
-    firstName: '',
-    lastName: ''
-  })
-
   // Dialog state
   const [dialogState, setDialogState, setDialogError, handleDialogSubmit, handleCloseDialog] = useDialogState()
 
@@ -95,15 +74,13 @@ export default function Dashboard(): JSX.Element {
 
   // Collections state
   const [collectionsState, setCollectionsState] = useState([] as ListCollectionResponse[])
-  const [collectionDialogState, setCollectionDialogState] = useState({
-    title: '',
-    collectionName: '',
-    description: '',
-    submitButtonText: '',
-    showDialog: false,
-    submitButtonLoading: false,
-    submitButtonDisabled: false,
-  } as CollectionDialogInterface)
+  const [
+    collectionDialogState,
+    setCollectionDialogState,
+    openCreateCollectionDialog,
+    closeCollectionDialog,
+    onCollectionNameChange
+  ] = useCollectionDialogState()
   const getCollections = async (token: string, userId: number) => {
     try {
       const collections = await listCollections(token, userId)
@@ -114,28 +91,6 @@ export default function Dashboard(): JSX.Element {
     } finally {
       setPageLoadingState(false)
     }
-  }
-  const closeCollectionDialog = () => {
-    setCollectionDialogState({
-      ...collectionDialogState,
-      showDialog: false
-    })
-  }
-  const openCreateCollectionDialog = () => {
-    setCollectionDialogState({
-      ...collectionDialogState,
-      collectionName: '',
-      title: 'Create a new collection',
-      description: 'Enter the name of the collection and click on the "Create" button',
-      submitButtonText: 'Create',
-      showDialog: true
-    })
-  }
-  const onCollectionNameChange = (collectionName: string) => {
-    setCollectionDialogState({
-      ...collectionDialogState,
-      collectionName
-    })
   }
   const addNewCollection = async () => {
     setCollectionDialogState({
@@ -212,7 +167,7 @@ export default function Dashboard(): JSX.Element {
         // 1) Get the access token
         const token = await getAccessToken()
 
-        // 2) Get user detrails
+        // 2) Get user details
         try {
           const userResponse = await getUser(token, user.email)
           setUserState({
@@ -244,76 +199,19 @@ export default function Dashboard(): JSX.Element {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            <a href='/' className={classes.linkTag}>Inventa</a>
-          </Typography>
-          <Typography component="h1" variant={isMobile() ? "caption" : "subtitle1"} color="inherit" noWrap>
-            <span>{`${userState.firstName} ${userState.lastName}`}</span>
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <AppBar
+        classes={classes}
+        firstName={userState.firstName}
+        lastName={userState.lastName}
+        handleDrawerOpen={handleDrawerOpen}
+      />
       <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
+        classes={classes}
         open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListSubheader inset>Collections</ListSubheader>
-          <ListItem button>
-            <ListItemIcon>
-              <Avatar className={classes.avatarListIcon}>H</Avatar>
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          {
-            collectionsState.map(collection => {
-              <ListItem button>
-                <ListItemIcon>
-                  <Avatar className={classes.avatarListIcon}>{collection.name.charAt(0)}</Avatar>
-                </ListItemIcon>
-                <ListItemText primary={collection.name} />
-              </ListItem>
-            })
-          }
-        </List>
-        <Divider />
-        <List>
-          <ListItem button className={classes.newCollectionListItem}>
-            <ListItemIcon className={classes.newCollectionListItem}>
-              <AddCircleOutlineOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="New Collection" />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem button className={classes.signOutListItem} onClick={() => { logout() }}>
-            <ListItemIcon className={classes.signOutListItem}>
-              <LaunchOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Sign Out" />
-          </ListItem>
-        </List>
-      </Drawer>
+        collectionsState={collectionsState}
+        handleDrawerClose={handleDrawerClose}
+        onLogoutClick={() => { logout() }}
+      />
       <main className={classes.content}>
         <SimpleDialog
           title={dialogState.title}
