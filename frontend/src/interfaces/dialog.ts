@@ -12,3 +12,9 @@ export interface SimpleDialogInterface {
   onCancelClick?: React.MouseEventHandler<HTMLButtonElement>;
   onCloseDialog?: React.MouseEventHandler<HTMLButtonElement>;
 }
+
+export interface SnackbarInterface {
+  showSnackbar: boolean;
+  message: string;
+  onClose: (event?: React.SyntheticEvent, reason?: string) => void;
+}

@@ -213,9 +213,30 @@ export default function Dashboard(): JSX.Element {
       const collections = await listCollections(token, userId)
       setCollectionsState(collections)
     } catch (collectionError) {
-      Logger.error('[LIST_COLLECTIONs] Failed to get collections', collectionError)
+      Logger.error('[LIST_COLLECTION] Failed to get collections', collectionError)
       setDialogError()
+    } finally {
+      setPageLoadingState(false)
     }
+  }
+
+  // Main dashboard state, this is where the inventories table is displayed
+  const [pageLoadingState, setPageLoadingState] = useState(true)
+  const mainDashboard = () => {
+    if (!isLoading && !isAuthenticated) {
+      return (
+        <Redirect to={'/' + Routes.SIGN_IN} />
+      )
+    } else if (pageLoadingState) {
+      return (
+        <h1>Loading ...</h1>
+      )
+    } else if (!collectionsState.length) {
+      return (
+        <h1>Collections empty</h1>
+      )
+    }
+    return (<Inventories />)
   }
 
   // Initial load after authentication
@@ -346,7 +367,7 @@ export default function Dashboard(): JSX.Element {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 {
-                  !isLoading && !isAuthenticated ? <Redirect to={'/' + Routes.SIGN_IN} /> : <Inventories />
+                  mainDashboard()
                 }
               </Paper>
             </Grid>
