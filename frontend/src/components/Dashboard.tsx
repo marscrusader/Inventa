@@ -29,7 +29,7 @@ import { useUserState } from '../state/user'
 import AppBar from './AppBar'
 import Drawer from './Drawer'
 import { listInventories } from '../services/inventory'
-import { ListInventoryResponse } from '../interfaces/inventory'
+import { InventoryResponse } from '../interfaces/inventory'
 
 
 function Copyright() {
@@ -136,7 +136,7 @@ export default function Dashboard(): JSX.Element {
   // END - Collections state
 
   // START - Inventories state
-  const [inventoriesState, setInventoriesState] = useState([] as ListInventoryResponse[])
+  const [inventoriesState, setInventoriesState] = useState([] as InventoryResponse[])
   const getInventories = async (collectionId: number, access_token?: string) => {
     //1) Set page to loading and get token
     setPageLoadingState(true)

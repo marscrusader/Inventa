@@ -1,4 +1,4 @@
-export interface ListInventoryResponse {
+export interface InventoryResponse {
   id: string;
   name: string;
   description: string;
@@ -13,24 +13,12 @@ export interface ListInventoryResponse {
   status: string;
 }
 
-export interface InventoryResponse {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  s3ThumbnailId: string;
-  serialNumber: string;
-  status: string;
-  cost: number;
-  salePrice: number;
-  s3Id: string
-}
-
 export interface CreateInventoryRequest {
   name: string;
   description?: string;
   category?: string;
   collectionId: number;
+  quantity: number;
   s3Id?: string;
   s3ThumbnailId?: string;
   serialNumber?: string;
@@ -45,6 +33,7 @@ export interface UpdateInventoryRequest {
   description: string;
   category: string;
   collectionId: number;
+  quantity: number;
   s3Id: string;
   s3ThumbnailId: string;
   serialNumber: string;
@@ -54,5 +43,5 @@ export interface UpdateInventoryRequest {
 }
 
 export interface InventoryComponentProps {
-  inventoriesState: ListInventoryResponse[]
+  inventoriesState: InventoryResponse[]
 }

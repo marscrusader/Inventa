@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
-import { CreateInventoryRequest, InventoryResponse, ListInventoryResponse, UpdateInventoryRequest } from "../interfaces/inventory";
+import { CreateInventoryRequest, InventoryResponse, UpdateInventoryRequest } from "../interfaces/inventory";
 import ApiClient from "../utils/api";
 
-export const listInventories = async (token: string, collectionId: number): Promise<ListInventoryResponse[]> => {
+export const listInventories = async (token: string, collectionId: number): Promise<InventoryResponse[]> => {
   return (await ApiClient({
     method: 'GET',
     url: `/inventory/list/${collectionId}`,
