@@ -10,12 +10,13 @@ import isMobile from "../utils/isMobile"
 
 interface AppBarProps {
   handleDrawerOpen: () => void;
+  open: boolean;
   classes: Record<any, string>;
   firstName: string;
   lastName: string
 }
 
-export default function Appbar({ handleDrawerOpen, classes, firstName, lastName }: AppBarProps): JSX.Element {
+export default function Appbar({ handleDrawerOpen, open, classes, firstName, lastName }: AppBarProps): JSX.Element {
   return (
     <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>

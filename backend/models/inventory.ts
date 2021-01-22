@@ -25,6 +25,10 @@ const InventoryModel: InventoryStatic = SequelizeSetup.define('inventories', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
+  quantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1
+  },
   s3Id: {
     type: DataTypes.TEXT
   },

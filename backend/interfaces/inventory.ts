@@ -5,6 +5,7 @@ export interface InventoryAttributes {
   name: string;
   description?: string;
   category?: string;
+  quantity: number;
   collectionId: number;
   s3Id?: string;
   s3ThumbnailId?: string;
@@ -27,6 +28,7 @@ export interface CreateInventoryRequest {
   description?: string;
   category?: string;
   collectionId: number;
+  quantity: number;
   s3Id?: string;
   s3ThumbnailId?: string;
   serialNumber?: string;
@@ -41,6 +43,7 @@ export interface UpdateInventoryRequest {
   description: string;
   category: string;
   collectionId: number;
+  quantity: number;
   s3Id: string;
   s3ThumbnailId: string;
   serialNumber: string;

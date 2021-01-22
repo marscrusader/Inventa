@@ -126,23 +126,23 @@ export default function Dashboard(): JSX.Element {
 
   // Main dashboard state, this is where the inventories table is displayed
   const [pageLoadingState, setPageLoadingState] = useState(true)
-  const mainDashboard = () => {
+  const mainDashboard = (): JSX.Element => {
     if (!isLoading && !isAuthenticated) {
       return (
         <Redirect to={'/' + Routes.SIGN_IN} />
       )
     } else if (pageLoadingState) {
       return (
-        <>
+        <Paper className={classes.paper}>
           <Typography className={classes.loading} component="h1" variant="h5" color="inherit" noWrap>
             <span>Loading ...</span>
           </Typography>
           <LinearProgress />
-        </>
+        </Paper>
       )
     } else if (!collectionsState.length) {
       return (
-        <>
+        <Paper className={classes.paper}>
           <img src={EmptyImage} className={classes.emptyImage} />
           <Button
             className={classes.newCollectionButton}
@@ -153,7 +153,7 @@ export default function Dashboard(): JSX.Element {
           >
             New Collection
           </Button>
-        </>
+        </Paper>
       )
     }
     return (<Inventories />)
@@ -201,6 +201,7 @@ export default function Dashboard(): JSX.Element {
       <CssBaseline />
       <AppBar
         classes={classes}
+        open={open}
         firstName={userState.firstName}
         lastName={userState.lastName}
         handleDrawerOpen={handleDrawerOpen}
@@ -245,11 +246,9 @@ export default function Dashboard(): JSX.Element {
           <Grid container spacing={3}>
             {/* Recent Inventories */}
             <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                {
-                  mainDashboard()
-                }
-              </Paper>
+              {
+                mainDashboard()
+              }
             </Grid>
           </Grid>
           <Box pt={4}>

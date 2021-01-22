@@ -1,64 +1,182 @@
 import React from 'react'
-import Link from '@material-ui/core/Link'
-import { makeStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Title from './common/Title'
+import MUIDataTable from "mui-datatables"
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import { makeStyles } from "@material-ui/core";
 
-// Generate Order Data
-function createData(id: number, date: string, name: string, shipTo: string, paymentMethod: string, amount: number) {
-  return { id, date, name, shipTo, paymentMethod, amount }
-}
 
-const rows = [
-  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44),
-  createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
+const columns = [
+  {
+    name: "name",
+    label: "Name",
+    options: {
+      sort: true,
+      filter: false
+    }
+  },
+  {
+    name: "serialNumber",
+    label: "Serial Number",
+    options: {
+      sort: true,
+      filter: false
+    }
+  },
+  {
+    name: "quantity",
+    label: "Quantity",
+    options: {
+      sort: true,
+      filter: true
+    }
+  },
+  {
+    name: "category",
+    label: "Category",
+    options: {
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    name: "status",
+    label: "Status",
+    options: {
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    name: "cost",
+    label: "Cost (MYR)",
+    options: {
+      sort: true,
+      filter: false
+    }
+  },
+  {
+    name: "salePrice",
+    label: "Sale Price (MYR)",
+    options: {
+      filter: false,
+      sort: true
+    }
+  },
+  {
+    name: "createdAt",
+    label: "Created At",
+    options: {
+      sort: false,
+      filter: false
+    }
+  }
 ]
 
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
+const data = [
+  {
+    name: "Spoon",
+    serialNumber: "787162800230",
+    quantity: 1,
+    category: "Metal",
+    status: "Store",
+    cost: 69,
+    salePrice: 90,
+    createdAt: Date.now()
   },
+  {
+    name: "Fork",
+    serialNumber: "287162261230",
+    quantity: 9,
+    category: "Metal",
+    status: "Store",
+    cost: 12,
+    salePrice: 40,
+    createdAt: Date.now()
+  },
+  {
+    name: "Guitar",
+    serialNumber: "987987800230",
+    quantity: 1,
+    category: "Metal",
+    status: "Room",
+    cost: 45,
+    salePrice: 55,
+    createdAt: Date.now()
+  },
+  {
+    name: "Rice",
+    serialNumber: "007162800230",
+    quantity: 3,
+    category: "Goods",
+    status: "Store",
+    cost: 32,
+    salePrice: 89,
+    createdAt: Date.now()
+  },
+  {
+    name: "Speaker",
+    serialNumber: "413162990230",
+    quantity: 2,
+    category: "Metal",
+    status: "Room",
+    cost: 58,
+    salePrice: 20,
+    createdAt: Date.now()
+  },
+  {
+    name: "Bowl",
+    serialNumber: "787162836201",
+    quantity: 3,
+    category: "Goods",
+    status: "Room",
+    cost: 88,
+    salePrice: 910,
+    createdAt: Date.now()
+  },
+]
+
+const options = {
+  filterType: 'checkbox' as any,
+}
+
+const useTableStyles = makeStyles((_theme) => ({
+  titleWrapper: {
+    display: 'flex',
+    alignItems: 'flex-end'
+  },
+  mainTitle: {
+    marginRight: '10px'
+  },
+  subTitle: {
+    marginLeft: '10px'
+  }
 }))
 
 export default function Inventories(): JSX.Element {
-  const classes = useStyles()
+  const classes = useTableStyles()
+
+  const getTableTitle = () => {
+    return (
+      <div className={classes.titleWrapper}>
+        <Typography className={classes.mainTitle} component="span" variant="h5" color="primary" noWrap>
+          <span>AstraZenga</span>
+        </Typography>
+        <Divider orientation="vertical" flexItem />
+        <Typography className={classes.subTitle} component="span" variant="subtitle1" noWrap>
+          <span>Inventories</span>
+        </Typography>
+      </div>
+    )
+  }
+
   return (
     <React.Fragment>
-      <Title>Inventories</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={() => { console.log('clickec') }}>
-          See more Inventories
-        </Link>
-      </div>
+      <MUIDataTable
+        title={getTableTitle()}
+        data={data}
+        columns={columns}
+        options={options}
+      />
     </React.Fragment>
   )
 }

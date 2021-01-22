@@ -5,3 +5,4 @@ appschema 2021-01-16T08:20:37Z Shawn Phua <shawn@Shawns-MacBook-Pro.local> # Add
 user 2021-01-16T11:53:55Z sqitch <sqitch@627912131cd0> # Add user table
 collection 2021-01-16T12:17:08Z sqitch <sqitch@df27000f84e2> # Add collection table
 inventory 2021-01-16T12:37:47Z sqitch <sqitch@81da41678b06> # Add inventory table
+quantity 2021-01-22T08:11:11Z sqitch <sqitch@be37091b3655> # Add quantity column to inventories table

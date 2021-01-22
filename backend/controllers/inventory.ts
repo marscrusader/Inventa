@@ -24,14 +24,20 @@ export default class InventoryController extends BaseController {
         where: {
           collectionId
         },
-        attributes: ['name', 'description', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId']
+        attributes: ['name', 'description', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId', 'createdAt']
       })
       logger.info(`[LIST_COLLECITON] Successfully retrive list of inventories, total of ${inventories.length} inventories`)
       return this.ok(res, inventories.map(inventory => {
-        const { id, name, description, category, s3ThumbnailId, serialNumber, status, cost, salePrice, s3Id } = inventory
+        const { id, name, description, category, s3ThumbnailId, serialNumber, status, cost, salePrice, quantity, s3Id, createdAt } = inventory
         return {
           id,
           name,
+          description,
+          quantity,
+          cost,
+          salePrice,
+          s3Id,
+          createdAt,
           category,
           s3ThumbnailId,
           serialNumber,
@@ -66,11 +72,12 @@ export default class InventoryController extends BaseController {
         logger.warn('[FIND_INVENTORY] Inventory is null', inventory)
         return this.internalServerError(res)
       }
-      const { name, description, category, s3ThumbnailId, serialNumber, status, cost, salePrice, s3Id } = inventory
+      const { name, description, category, s3ThumbnailId, quantity, serialNumber, status, cost, salePrice, s3Id } = inventory
       return this.ok(res, {
         id: inventory?.id,
         name,
         description,
+        quantity,
         category,
         s3ThumbnailId,
         serialNumber,
@@ -92,7 +99,7 @@ export default class InventoryController extends BaseController {
 
   // START - create inventory
   public async create(req: Request, res: Response, next: NextFunction) {
-    const { name, description, collectionId, category, s3Id, s3ThumbnailId, serialNumber, status, cost, salePrice }: CreateInventoryRequest = req.body
+    const { name, description, collectionId, category, quantity, s3Id, s3ThumbnailId, serialNumber, status, cost, salePrice }: CreateInventoryRequest = req.body
     logger.info('[CREATE_INVENTORY] Received request to create inventory', req.body)
 
     // 1) Validate form
@@ -110,6 +117,7 @@ export default class InventoryController extends BaseController {
         description,
         collectionId,
         category,
+        quantity,
         s3Id,
         s3ThumbnailId,
         serialNumber,
@@ -151,7 +159,7 @@ export default class InventoryController extends BaseController {
 
   // START - update inventory
   public async update(req: Request, res: Response, next: NextFunction) {
-    const { id, name, description, category, collectionId, s3Id, s3ThumbnailId, serialNumber, cost, status, salePrice }: UpdateInventoryRequest = req.body
+    const { id, name, description, quantity, category, collectionId, s3Id, s3ThumbnailId, serialNumber, cost, status, salePrice }: UpdateInventoryRequest = req.body
     logger.info('[UPDATE_INVENTORY] Receive request to update inventory with id=', id)
 
     // 1) Validate
@@ -167,6 +175,7 @@ export default class InventoryController extends BaseController {
         name,
         description,
         category,
+        quantity,
         collectionId,
         s3Id,
         s3ThumbnailId,
