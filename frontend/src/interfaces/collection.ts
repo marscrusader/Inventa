@@ -1,5 +1,5 @@
 export interface ListCollectionResponse {
-  id: string;
+  id: number;
   name: string;
   s3Id: string;
   s3ThumbnailId: string;
@@ -42,4 +42,8 @@ export interface CollectionDialogStateInterface {
   showDialog: boolean;
   submitButtonLoading: boolean;
   submitButtonDisabled: boolean;
+}
+
+export interface CollectionStateInterface extends ListCollectionResponse {
+  selected: boolean;
 }

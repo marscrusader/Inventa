@@ -3,6 +3,7 @@ import MUIDataTable from "mui-datatables"
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from "@material-ui/core";
+import { InventoryComponentProps } from '../interfaces/inventory';
 
 
 const columns = [
@@ -152,8 +153,19 @@ const useTableStyles = makeStyles((_theme) => ({
   }
 }))
 
-export default function Inventories(): JSX.Element {
+export default function Inventories({ inventoriesState }: InventoryComponentProps): JSX.Element {
   const classes = useTableStyles()
+
+  const inventoriesData = () => inventoriesState.map(inventory => ({
+    name: inventory.name,
+    serialNumber: inventory.serialNumber,
+    quantity: inventory.quantity,
+    category: inventory.category,
+    status: inventory.status,
+    cost: inventory.cost,
+    salePrice: inventory.salePrice,
+    createdAt: inventory.createdAt
+  }))
 
   const getTableTitle = () => {
     return (

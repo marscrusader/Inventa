@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { CreateInventoryRequest, InventoryResponse, ListInventoryResponse, UpdateInventoryRequest } from "../interfaces/inventory";
 import ApiClient from "../utils/api";
 
-export const listInventory = async (token: string, collectionId: string): Promise<ListInventoryResponse[]> => {
+export const listInventories = async (token: string, collectionId: number): Promise<ListInventoryResponse[]> => {
   return (await ApiClient({
     method: 'GET',
     url: `/inventory/list/${collectionId}`,
@@ -12,7 +12,7 @@ export const listInventory = async (token: string, collectionId: string): Promis
   })).data
 }
 
-export const findInventory = async (token: string, inventoryId: string): Promise<InventoryResponse> => {
+export const findInventory = async (token: string, inventoryId: number): Promise<InventoryResponse> => {
   return (await ApiClient({
     method: 'GET',
     url: `/inventory/find/${inventoryId}`,
@@ -44,7 +44,7 @@ export const updateInventory = async (token: string, data: UpdateInventoryReques
   }))
 }
 
-export const deleteInventory = async (token: string, inventoryId: string): Promise<AxiosResponse> => {
+export const deleteInventory = async (token: string, inventoryId: number): Promise<AxiosResponse> => {
   return (await ApiClient({
     method: 'DELETE',
     url: `/inventory/delete/${inventoryId}`,

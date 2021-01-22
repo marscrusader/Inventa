@@ -6,15 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import isMobile from "../utils/isMobile"
+import { AppBarProps } from '../interfaces/components'
 
-
-interface AppBarProps {
-  handleDrawerOpen: () => void;
-  open: boolean;
-  classes: Record<any, string>;
-  firstName: string;
-  lastName: string
-}
 
 export default function Appbar({ handleDrawerOpen, open, classes, firstName, lastName }: AppBarProps): JSX.Element {
   return (

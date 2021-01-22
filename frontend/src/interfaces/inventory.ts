@@ -52,3 +52,7 @@ export interface UpdateInventoryRequest {
   cost: number;
   salePrice: number;
 }
+
+export interface InventoryComponentProps {
+  inventoriesState: ListInventoryResponse[]
+}

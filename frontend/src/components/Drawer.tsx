@@ -12,18 +12,29 @@ import Avatar from '@material-ui/core/Avatar'
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
-import { ListCollectionResponse } from "../interfaces/collection"
+import { AppDrawerInterface } from "../interfaces/components"
 
 
-interface AppDrawerInterface {
-  classes: Record<any, string>;
-  open: boolean;
-  collectionsState: ListCollectionResponse[];
-  handleDrawerClose: () => void;
-  onLogoutClick: () => void;
-}
+export default function AppDrawer({ classes, open, collectionsState, setCollectionsState, getInventories, handleDrawerClose, onLogoutClick }: AppDrawerInterface): JSX.Element {
+  const handleOnCollectionClick = (collectionId: number, collectionIsSelected: boolean) => {
+    // Don't load inventories again if already selected
+    if (collectionIsSelected) return
 
-export default function AppDrawer({ classes, open, collectionsState, handleDrawerClose, onLogoutClick }: AppDrawerInterface): JSX.Element {
+    // 1) Set previous selected collection's "selected" prop to false
+    const previousSelectedCollection = collectionsState.find(collection => collection.selected)
+    if (previousSelectedCollection) previousSelectedCollection.selected = false
+
+    // 2) Set newly selected collections's "selected" prop to true
+    const selectedCollection = collectionsState.find(collection => collection.id === collectionId)
+    if (selectedCollection) selectedCollection.selected = true
+
+    // 3) Update collections state
+    setCollectionsState(collectionsState)
+
+    // 4) Update inventories table
+    getInventories(collectionId)
+  }
+
   return (
     <Drawer
       variant="permanent"
@@ -43,7 +54,7 @@ export default function AppDrawer({ classes, open, collectionsState, handleDrawe
         {
           collectionsState.map(collection => {
             return (
-              <ListItem key={collection.id} button>
+              <ListItem key={collection.id} selected={collection.selected} onClick={() => { handleOnCollectionClick(collection.id, collection.selected) }} button>
                 <ListItemIcon>
                   <Avatar className={classes.avatarListIcon}>{collection.name.charAt(0)}</Avatar>
                 </ListItemIcon>
