@@ -8,7 +8,8 @@ import CollectionModel from './collection'
 const InventoryModel: InventoryStatic = SequelizeSetup.define('inventories', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   name: {
     type: DataTypes.TEXT,

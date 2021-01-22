@@ -34,7 +34,7 @@ export const useCollectionDialogState = (): [
       ...collectionDialogState,
       collectionName: '',
       title: 'Create a new collection',
-      description: 'Enter the name of the collection and click on the "Create" button',
+      description: 'Enter the name of the collection and click on the "Create" button.',
       submitButtonText: 'Create',
       showDialog: true
     })

@@ -7,7 +7,7 @@ interface LoadingButtonProps {
   children: any;
   buttonStyle?: any;
   text: string;
-  color: PropTypes.Color;
+  color?: PropTypes.Color;
   loading?: boolean;
   disabled?: boolean;
   onClick: React.MouseEventHandler<HTMLButtonElement>;

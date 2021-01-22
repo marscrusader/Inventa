@@ -7,7 +7,8 @@ import UserModel from './user'
 const CollectionModel: CollectionStatic = SequelizeSetup.define('collections', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   name: {
     type: DataTypes.TEXT,

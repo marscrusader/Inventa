@@ -39,21 +39,17 @@ export default function AppDrawer({ classes, open, collectionsState, handleDrawe
       </div>
       <Divider />
       <List>
-        <ListSubheader inset>Collections</ListSubheader>
-        <ListItem button>
-          <ListItemIcon>
-            <Avatar className={classes.avatarListIcon}>H</Avatar>
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
+        <ListSubheader inset>{collectionsState.length ? 'Collections' : 'No Collections'}</ListSubheader>
         {
           collectionsState.map(collection => {
-            <ListItem button>
-              <ListItemIcon>
-                <Avatar className={classes.avatarListIcon}>{collection.name.charAt(0)}</Avatar>
-              </ListItemIcon>
-              <ListItemText primary={collection.name} />
-            </ListItem>
+            return (
+              <ListItem key={collection.id} button>
+                <ListItemIcon>
+                  <Avatar className={classes.avatarListIcon}>{collection.name.charAt(0)}</Avatar>
+                </ListItemIcon>
+                <ListItemText primary={collection.name} />
+              </ListItem>
+            )
           })
         }
       </List>
