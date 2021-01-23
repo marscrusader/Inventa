@@ -9,12 +9,11 @@ export default class InventoryController extends BaseController {
   // START - list inventory
   public async list(req: Request, res: Response, next: NextFunction) {
     const collectionId = req.params.collectionId
-    console.log(collectionId + ' hello ')
-    logger.info(`[LIST_COLLECTION] List collection request received, collection id=${collectionId}`)
+    logger.info(`[LIST_INVENTORIES] List collection request received, collection id=${collectionId}`)
 
     // 1) Validate
     if (!collectionId) {
-      logger.error('[LIST_COLLECTION] Collection id is undefined')
+      logger.error('[LIST_INVENTORIES] Collection id is undefined')
       return this.clientError(res)
     }
 
@@ -26,7 +25,7 @@ export default class InventoryController extends BaseController {
         },
         attributes: ['name', 'description', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId', 'createdAt']
       })
-      logger.info(`[LIST_COLLECITON] Successfully retrive list of inventories, total of ${inventories.length} inventories`)
+      logger.info(`[LIST_INVENTORIES] Successfully retrive list of inventories, total of ${inventories.length} inventories`)
       return this.ok(res, inventories.map(inventory => {
         const { id, name, description, category, s3ThumbnailId, serialNumber, status, cost, salePrice, quantity, s3Id, createdAt } = inventory
         return {

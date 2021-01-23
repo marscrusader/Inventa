@@ -7,7 +7,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
-import Inventories from './Inventory'
+import Inventories from './inventory/Inventory'
 import { Redirect } from 'react-router-dom'
 import { Routes } from '../interfaces/router'
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
@@ -28,8 +28,10 @@ import { useCollectionDialogState } from '../state/collectionDialogState'
 import { useUserState } from '../state/user'
 import AppBar from './AppBar'
 import Drawer from './Drawer'
-import { listInventories } from '../services/inventory'
+import { createInventory, listInventories } from '../services/inventory'
 import { InventoryResponse } from '../interfaces/inventory'
+import InventoryDialog from './inventory/InventoryDialog'
+import { useInventoryDialogState } from '../state/inventoryDialogState'
 
 
 function Copyright() {
@@ -133,10 +135,18 @@ export default function Dashboard(): JSX.Element {
       })
     }
   }
+  const getSelectedCollectionId = () => collectionsState.find(collection => collection.selected)?.id
   // END - Collections state
 
   // START - Inventories state
   const [inventoriesState, setInventoriesState] = useState([] as InventoryResponse[])
+  const [
+    inventoryDialogState,
+    setInventoryDialogState,
+    openCreateInventoryDialog,
+    closeInventoryDialog,
+    onInventoryFormChange
+  ] = useInventoryDialogState()
   const getInventories = async (collectionId: number, access_token?: string) => {
     //1) Set page to loading and get token
     setPageLoadingState(true)
@@ -163,6 +173,49 @@ export default function Dashboard(): JSX.Element {
       })
     } finally {
       setPageLoadingState(false)
+    }
+  }
+  const addNewInventory = async () => {
+    setInventoryDialogState({
+      ...inventoryDialogState,
+      submitButtonLoading: true,
+      submitButtonDisabled: true
+    })
+    // 1) Get the access token
+    const token = await getAccessToken()
+    // 2) Create inventory
+    const collectionId = getSelectedCollectionId()
+    try {
+      if (!collectionId) {
+        throw 'Collection id missing'
+      }
+      const { inventoryName, inventoryDescription, category, quantity, status, serialNumber, cost, salePrice } = inventoryDialogState
+      await createInventory(token, {
+        collectionId,
+        name: inventoryName,
+        description: inventoryDescription,
+        category,
+        quantity,
+        serialNumber,
+        status,
+        cost,
+        salePrice
+      })
+      getCollections(token, userState.id)
+      setSnackbarState({
+        showSnackbar: true,
+        message: 'Collection created.'
+      })
+    } catch (addCollectionError) {
+      Logger.error('[ADD_COLLECTION] Failed to add new collection', addCollectionError)
+      setDialogError()
+    } finally {
+      setCollectionDialogState({
+        ...collectionDialogState,
+        showDialog: false,
+        submitButtonLoading: false,
+        submitButtonDisabled: false
+      })
     }
   }
   // END - Inventories state
@@ -240,7 +293,7 @@ export default function Dashboard(): JSX.Element {
         </Paper>
       )
     }
-    return (<Inventories inventoriesState={inventoriesState} />)
+    return (<Inventories openCreateInventoryDialog={openCreateInventoryDialog} inventoriesState={inventoriesState} />)
   }
 
   return (
@@ -289,6 +342,25 @@ export default function Dashboard(): JSX.Element {
           onCollectionNameChange={(val) => { onCollectionNameChange(val) }}
           onSubmitClick={() => addNewCollection()}
           onCancelClick={() => closeCollectionDialog()}
+        />
+        <InventoryDialog
+          showDialog={inventoryDialogState.showDialog}
+          dialogTitle={inventoryDialogState.dialogTitle}
+          dialogDescription={inventoryDialogState.dialogDescription}
+          inventoryName={inventoryDialogState.inventoryName}
+          inventoryDescription={inventoryDialogState.inventoryDescription}
+          category={inventoryDialogState.category}
+          status={inventoryDialogState.status}
+          quantity={inventoryDialogState.quantity}
+          cost={inventoryDialogState.cost}
+          salePrice={inventoryDialogState.salePrice}
+          serialNumber={inventoryDialogState.serialNumber}
+          submitButtonText={inventoryDialogState.submitButtonText}
+          submitButtonLoading={inventoryDialogState.submitButtonLoading}
+          submitButtonDisabled={inventoryDialogState.submitButtonDisabled}
+          onInventoryFormChange={(key, value) => onInventoryFormChange(key, value)}
+          onSubmitClick={() => addNewInventory()}
+          onCancelClick={() => closeInventoryDialog()}
         />
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

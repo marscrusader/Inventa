@@ -3,7 +3,11 @@ import MUIDataTable from "mui-datatables"
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from "@material-ui/core";
-import { InventoryComponentProps } from '../interfaces/inventory';
+import { InventoryComponentProps } from '../../interfaces/inventory';
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
+import EmptyImage from '../../static/empty.jpg'
 
 
 const columns = [
@@ -73,74 +77,11 @@ const columns = [
   }
 ]
 
-const data = [
-  {
-    name: "Spoon",
-    serialNumber: "787162800230",
-    quantity: 1,
-    category: "Metal",
-    status: "Store",
-    cost: 69,
-    salePrice: 90,
-    createdAt: Date.now()
-  },
-  {
-    name: "Fork",
-    serialNumber: "287162261230",
-    quantity: 9,
-    category: "Metal",
-    status: "Store",
-    cost: 12,
-    salePrice: 40,
-    createdAt: Date.now()
-  },
-  {
-    name: "Guitar",
-    serialNumber: "987987800230",
-    quantity: 1,
-    category: "Metal",
-    status: "Room",
-    cost: 45,
-    salePrice: 55,
-    createdAt: Date.now()
-  },
-  {
-    name: "Rice",
-    serialNumber: "007162800230",
-    quantity: 3,
-    category: "Goods",
-    status: "Store",
-    cost: 32,
-    salePrice: 89,
-    createdAt: Date.now()
-  },
-  {
-    name: "Speaker",
-    serialNumber: "413162990230",
-    quantity: 2,
-    category: "Metal",
-    status: "Room",
-    cost: 58,
-    salePrice: 20,
-    createdAt: Date.now()
-  },
-  {
-    name: "Bowl",
-    serialNumber: "787162836201",
-    quantity: 3,
-    category: "Goods",
-    status: "Room",
-    cost: 88,
-    salePrice: 910,
-    createdAt: Date.now()
-  },
-]
-
 const options = {
   filterType: 'checkbox' as any,
 }
 
-const useTableStyles = makeStyles((_theme) => ({
+const useTableStyles = makeStyles((theme) => ({
   titleWrapper: {
     display: 'flex',
     alignItems: 'flex-end'
@@ -150,10 +91,28 @@ const useTableStyles = makeStyles((_theme) => ({
   },
   subTitle: {
     marginLeft: '10px'
+  },
+  emptyImage: {
+    alignSelf: 'center',
+    width: 'max-content'
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  newInventoryButton: {
+    maxWidth: '30%',
+    marginTop: '3%',
+    alignSelf: 'center',
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '70%',
+    },
   }
 }))
 
-export default function Inventories({ inventoriesState }: InventoryComponentProps): JSX.Element {
+export default function Inventories({ inventoriesState, openCreateInventoryDialog }: InventoryComponentProps): JSX.Element {
   const classes = useTableStyles()
 
   const inventoriesData = () => inventoriesState.map(inventory => ({
@@ -167,7 +126,7 @@ export default function Inventories({ inventoriesState }: InventoryComponentProp
     createdAt: inventory.createdAt
   }))
 
-  const getTableTitle = () => {
+  const tableTitle = () => {
     return (
       <div className={classes.titleWrapper}>
         <Typography className={classes.mainTitle} component="span" variant="h5" color="primary" noWrap>
@@ -181,14 +140,38 @@ export default function Inventories({ inventoriesState }: InventoryComponentProp
     )
   }
 
-  return (
-    <React.Fragment>
+  const inventoriesTable = () => {
+    if (!inventoriesData().length) {
+      return (
+        <Paper className={classes.paper}>
+          <img src={EmptyImage} className={classes.emptyImage} />
+          <Button
+            className={classes.newInventoryButton}
+            variant="contained"
+            color="primary"
+            startIcon={<AddCircleOutlineOutlinedIcon />}
+            onClick={() => { openCreateInventoryDialog() }}
+          >
+            Add New Inventory
+          </Button>
+        </Paper>
+      )
+    }
+    return (
       <MUIDataTable
-        title={getTableTitle()}
-        data={data}
+        title={tableTitle()}
+        data={inventoriesData()}
         columns={columns}
         options={options}
       />
+    )
+  }
+
+  return (
+    <React.Fragment>
+      {
+        inventoriesTable()
+      }
     </React.Fragment>
   )
 }

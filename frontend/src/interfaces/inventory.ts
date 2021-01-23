@@ -43,5 +43,56 @@ export interface UpdateInventoryRequest {
 }
 
 export interface InventoryComponentProps {
-  inventoriesState: InventoryResponse[]
+  inventoriesState: InventoryResponse[];
+  openCreateInventoryDialog: () => void;
+}
+
+export interface InventoryDialogInterface {
+  dialogTitle: string;
+  dialogDescription?: string;
+  inventoryName: string;
+  inventoryDescription?: string;
+  category?: string;
+  quantity: number;
+  s3Id?: string;
+  serialNumber?: string;
+  status?: string;
+  cost?: number;
+  salePrice?: number;
+  showDialog: boolean;
+  submitButtonText?: string;
+  submitButtonLoading: boolean;
+  submitButtonDisabled: boolean;
+  cancelButtonText?: string;
+  onInventoryFormChange: (key: InventoryFormFieldIds, value: string | number) => void;
+  onSubmitClick: React.MouseEventHandler<HTMLButtonElement>;
+  onCancelClick: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+export interface InventoryDialogStateInterface {
+  dialogTitle: string;
+  dialogDescription: string;
+  inventoryName: string;
+  inventoryDescription: string;
+  category: string;
+  quantity: number;
+  status: string;
+  cost: number;
+  salePrice: number;
+  serialNumber: string;
+  submitButtonText: string;
+  showDialog: boolean;
+  submitButtonLoading: boolean;
+  submitButtonDisabled: boolean;
+}
+
+export enum InventoryFormFieldIds {
+  INVENTORY_NAME = 'inventoryName',
+  INVENTORY_DESCRIPTION = 'inventoryDescription',
+  CATEGORY = 'category',
+  QUANTITY = 'quantity',
+  STATUS = 'status',
+  COST = 'cost',
+  SALE_PRICE = 'salePrice',
+  SERIAL_NUMBER = 'serialNumber'
 }
