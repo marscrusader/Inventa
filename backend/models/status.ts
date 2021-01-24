@@ -16,7 +16,8 @@ const StatusModel: InventoryStatusStatic = SequelizeSetup.define('status', {
   }
 }, {
   schema: 'inventa',
-  tableName: 'status'
+  tableName: 'status',
+  timestamps: false
 })
 
 StatusModel.belongsTo(CollectionModel, { foreignKey: 'collectionId' })

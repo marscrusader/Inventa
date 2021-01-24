@@ -1,12 +1,16 @@
 
 import React, { useEffect, useState } from 'react'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Box from '@material-ui/core/Box'
-import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Link from '@material-ui/core/Link'
+import {
+  CssBaseline,
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Paper,
+  Link,
+  LinearProgress,
+  Button
+} from '@material-ui/core'
 import Inventories from './inventory/Inventory'
 import { Redirect } from 'react-router-dom'
 import { Routes } from '../interfaces/router'
@@ -16,8 +20,6 @@ import { getUser } from '../services/user'
 import SimpleDialog from './common/SimpleDialog'
 import { createCollection, listCollections } from '../services/collection'
 import { CollectionStateInterface, ListCollectionResponse } from '../interfaces/collection'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import Button from '@material-ui/core/Button'
 import CollectionDialog from './collection/CollectionDialog'
 import Snackbar from './common/Snackbar'
 import { useDashboardStyles } from '../styles/dashboard'
@@ -38,7 +40,7 @@ import { ListStatus } from '../interfaces/status'
 import { createStatus, listStatus } from '../services/status'
 import CategoryDialog from './category/categoryDialog'
 import StatusDialog from './status/statusDialog'
-import { useCategoryDialogState } from '../state/categoryDialog'
+import { useCategoryDialogState } from '../state/categoryDialogState'
 import { useStatusDialogState } from '../state/statusDialogState'
 
 
@@ -229,7 +231,7 @@ export default function Dashboard(): JSX.Element {
   // END - Inventories state
 
   // START - list of categories
-  let categoryList: ListCategory[] = []
+  const [categoryList, setCategoryList] = useState([] as ListCategory[])
   const [categoryDialogState, setCategoryDialogState, onCategoryNameChange, openCategoryDialog, closeCategoryDialog, resetCategoryDialog] = useCategoryDialogState()
   const getCategoriesList = async (collectionId?: number, access_token?: string) => {
     let token = ''
@@ -247,7 +249,8 @@ export default function Dashboard(): JSX.Element {
       if (!collectionId) {
         throw 'Collection id missing'
       }
-      categoryList = await listCategories(token, collectionId)
+      const categoryArr = await listCategories(token, collectionId)
+      setCategoryList(categoryArr)
     } catch (categoryError) {
       Logger.error('[LIST_CATEGORY] Failed to get list of categories', categoryError)
       setDialogState({
@@ -281,7 +284,6 @@ export default function Dashboard(): JSX.Element {
     } catch (error) {
       Logger.error('[ADD_CATEGORY] Failed to add cateogry', error)
       setDialogError()
-    } finally {
       setCategoryDialogState({
         ...categoryDialogState,
         loading: false
@@ -291,7 +293,7 @@ export default function Dashboard(): JSX.Element {
   // END - list of categories
 
   // START - list of status
-  let statusList: ListStatus[] = []
+  const [statusList, setStatusList] = useState([] as ListStatus[])
   const [statusDialogState, setStatusDialogState, onStatusNameChange, openStatusDialog, closeStatusDialog, resetStatusDialog] = useStatusDialogState()
   const getStatusList = async (collectionId?: number, access_token?: string) => {
     let token = ''
@@ -309,7 +311,8 @@ export default function Dashboard(): JSX.Element {
       if (!collectionId) {
         throw 'Collection id missing'
       }
-      statusList = await listStatus(token, collectionId)
+      const statusArr = await listStatus(token, collectionId)
+      setStatusList(statusArr)
     } catch (statusError) {
       Logger.error('[LIST_STATUS] Failed to get list of status', statusError)
       setDialogState({
@@ -334,20 +337,19 @@ export default function Dashboard(): JSX.Element {
         name: statusDialogState.name,
         collectionId
       })
-      resetStatusDialog()
       getStatusList(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
         message: 'Status created.'
       })
+      resetStatusDialog()
     } catch (error) {
       Logger.error('[ADD_STATUS] Failed to add status', error)
-      setDialogError()
-    } finally {
       setStatusDialogState({
         ...statusDialogState,
         loading: false
       })
+      setDialogError()
     }
   }
   // END - list of status

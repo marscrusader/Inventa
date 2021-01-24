@@ -16,7 +16,8 @@ const CategoryModel: InventoryCategoryStatic = SequelizeSetup.define('categories
   }
 }, {
   schema: 'inventa',
-  tableName: 'categories'
+  tableName: 'categories',
+  timestamps: false
 })
 
 CategoryModel.belongsTo(CollectionModel, { foreignKey: 'collectionId' })

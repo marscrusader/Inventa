@@ -44,7 +44,9 @@ export const useCategoryDialogState = (): [
   }
 
   const resetCategoryDialog = () => {
-    setCategoryDialogState(initState)
+    _setCategoryDialogState({
+      ...initState
+    })
   }
 
   return [categoryDialogState, setCategoryDialogState, onCategoryNameChange, openCategoryDialog, closeCategoryDialog, resetCategoryDialog]

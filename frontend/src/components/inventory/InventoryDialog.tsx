@@ -1,13 +1,16 @@
 import React from 'react'
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import { makeStyles } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
-import MenuItem from '@material-ui/core/MenuItem'
+import {
+  makeStyles,
+  Box,
+  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Divider
+} from '@material-ui/core'
 import LoadingButton from '../common/LoadingButton'
 import { InventoryDialogInterface, InventoryFormFieldIds } from '../../interfaces/inventory'
 
@@ -42,11 +45,21 @@ const useStyles = makeStyles((theme) => ({
   },
   salePrice: {
     width: '47.5%'
+  },
+  menuItem: {
+    flex: 1
   }
 }))
 
-const addCategory = "ADD_CATEGORY"
-const addStatus = "ADD_STATUS"
+enum categoryActions {
+  ADD_CATEGORY = 'ADD_CATEGORY',
+  DELETE_CATEGORY = 'DELETE_CATEGORY'
+}
+
+enum statusActions {
+  ADD_STATUS = 'ADD_STATUS',
+  DELETE_STATUS = 'DELETE_STATUS'
+}
 
 export default function InventoryDialog({
   dialogTitle,
@@ -70,12 +83,12 @@ export default function InventoryDialog({
   onSubmitClick,
   onCancelClick,
   addNewCategory,
-  addNewStatus
+  addNewStatus,
 }: InventoryDialogInterface): JSX.Element {
   const classes = useStyles()
 
   const onCategoryChange = (value: string) => {
-    if (value === addCategory) {
+    if (value === categoryActions.ADD_CATEGORY) {
       addNewCategory()
       return
     }
@@ -83,7 +96,7 @@ export default function InventoryDialog({
   }
 
   const onStatusChange = (value: string) => {
-    if (value === addStatus) {
+    if (value === statusActions.ADD_STATUS) {
       addNewStatus()
       return
     }
@@ -153,11 +166,14 @@ export default function InventoryDialog({
               value={category}
               onChange={(e) => onCategoryChange(e.target.value as string)}
             >
-              <MenuItem value={addCategory}>Add New Category</MenuItem>
+              <MenuItem value={categoryActions.ADD_CATEGORY}>Add New Category</MenuItem>
+              <Divider />
               {
                 categoryList.map(category => {
                   return (
-                    <MenuItem key={category.name} value={category.name}>{category.name}</MenuItem>
+                    <Box key={category.name} display="flex" justifyContent="space-between">
+                      <MenuItem key={category.name} value={category.name} className={classes.menuItem}>{category.name}</MenuItem>
+                    </Box>
                   )
                 })
               }
@@ -171,7 +187,8 @@ export default function InventoryDialog({
               value={status}
               onChange={(e) => onStatusChange(e.target.value as string)}
             >
-              <MenuItem value={addStatus}>Add New Status</MenuItem>
+              <MenuItem value={statusActions.ADD_STATUS}>Add New Status</MenuItem>
+              <Divider />
               {
                 statusList.map(status => {
                   return (

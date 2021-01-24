@@ -42,7 +42,7 @@ export const useStatusDialogState = (): [
   }
 
   const resetStatusDialog = () => {
-    setStatusDialogState(initState)
+    _setStatusDialogState(initState)
   }
 
   return [statusDialogState, setStatusDialogState, onStatusNameChange, openStatusDialog, closeStatusDialog, resetStatusDialog]

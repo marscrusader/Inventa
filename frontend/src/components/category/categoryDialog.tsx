@@ -6,7 +6,17 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import LoadingButton from '../common/LoadingButton'
 import TextField from '@material-ui/core/TextField'
 import { CreateCategoryDialog } from '../../interfaces/category'
+import { makeStyles } from '@material-ui/core'
 
+
+const useStyles = makeStyles((_theme) => ({
+  cancelButton: {
+    backgroundColor: "#333",
+    '&:hover': {
+      background: "black",
+    },
+  }
+}))
 
 export default function CategoryDialog({
   name = '',
@@ -18,6 +28,7 @@ export default function CategoryDialog({
   onCancelClick,
   onCloseDialog
 }: CreateCategoryDialog): JSX.Element {
+  const classes = useStyles()
   return (
     <div>
       <Dialog
@@ -26,7 +37,7 @@ export default function CategoryDialog({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Create A New Category</DialogTitle>
+        <DialogTitle id="alert-dialog-title">New Category</DialogTitle>
         <DialogContent>
           <TextField
             required
@@ -40,7 +51,7 @@ export default function CategoryDialog({
           />
         </DialogContent>
         <DialogActions>
-          <LoadingButton text="Cancel" onClick={onCancelClick} color="primary">
+          <LoadingButton text="Cancel" onClick={onCancelClick} buttonStyle={classes.cancelButton}>
           </LoadingButton>
           <LoadingButton text="Create" onClick={onSubmitClick} loading={submitButtonLoading} disabled={submitButtonDisabled} color="primary">
           </LoadingButton>

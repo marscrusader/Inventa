@@ -6,6 +6,17 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import LoadingButton from '../common/LoadingButton'
 import TextField from '@material-ui/core/TextField'
 import { CreateStatusDialog } from '../../interfaces/status'
+import { makeStyles } from '@material-ui/core'
+
+
+const useStyles = makeStyles((_theme) => ({
+  cancelButton: {
+    backgroundColor: "#333",
+    '&:hover': {
+      background: "black",
+    },
+  }
+}))
 
 
 export default function StatusDialog({
@@ -18,6 +29,7 @@ export default function StatusDialog({
   onCancelClick,
   onCloseDialog
 }: CreateStatusDialog): JSX.Element {
+  const classes = useStyles()
   return (
     <div>
       <Dialog
@@ -26,7 +38,7 @@ export default function StatusDialog({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Create A New Status</DialogTitle>
+        <DialogTitle id="alert-dialog-title">New Status</DialogTitle>
         <DialogContent>
           <TextField
             required
@@ -40,7 +52,7 @@ export default function StatusDialog({
           />
         </DialogContent>
         <DialogActions>
-          <LoadingButton text="Cancel" onClick={onCancelClick} color="primary">
+          <LoadingButton text="Cancel" onClick={onCancelClick} color="primary" buttonStyle={classes.cancelButton}>
           </LoadingButton>
           <LoadingButton text="Create" onClick={onSubmitClick} loading={submitButtonLoading} disabled={submitButtonDisabled} color="primary">
           </LoadingButton>
