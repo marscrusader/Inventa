@@ -6,7 +6,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core'
-import Box from '@material-ui/core/Box';
+import Box from '@material-ui/core/Box'
+import MenuItem from '@material-ui/core/MenuItem'
 import LoadingButton from '../common/LoadingButton'
 import { InventoryDialogInterface, InventoryFormFieldIds } from '../../interfaces/inventory'
 
@@ -31,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
     width: '70%'
   },
   category: {
-    width: '47.5%'
+    width: '45%'
   },
   status: {
-    width: '47.5%'
+    width: '45%'
   },
   cost: {
     width: '47.5%'
@@ -44,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+const addCategory = "ADD_CATEGORY"
+const addStatus = "ADD_STATUS"
 
 export default function InventoryDialog({
   dialogTitle,
@@ -58,14 +61,35 @@ export default function InventoryDialog({
   salePrice,
   serialNumber,
   onInventoryFormChange,
+  categoryList,
+  statusList,
   cancelButtonText = "Cancel",
   submitButtonText = "Create",
   submitButtonLoading,
   submitButtonDisabled,
   onSubmitClick,
   onCancelClick,
+  addNewCategory,
+  addNewStatus
 }: InventoryDialogInterface): JSX.Element {
   const classes = useStyles()
+
+  const onCategoryChange = (value: string) => {
+    if (value === addCategory) {
+      addNewCategory()
+      return
+    }
+    onInventoryFormChange(InventoryFormFieldIds.CATEGORY, value)
+  }
+
+  const onStatusChange = (value: string) => {
+    if (value === addStatus) {
+      addNewStatus()
+      return
+    }
+    onInventoryFormChange(InventoryFormFieldIds.STATUS, value)
+  }
+
   return (
     <div>
       <Dialog open={showDialog} onClose={onCancelClick} aria-labelledby="form-dialog-title">
@@ -121,26 +145,40 @@ export default function InventoryDialog({
           </Box>
           <Box display="flex" justifyContent="space-between">
             <TextField
-              className={classes.category}
               select
+              className={classes.category}
               margin="dense"
               id={InventoryFormFieldIds.CATEGORY}
               label="Category"
               value={category}
-              onChange={(e) => onInventoryFormChange(InventoryFormFieldIds.CATEGORY, e.target.value)}
+              onChange={(e) => onCategoryChange(e.target.value as string)}
             >
-              {[]}
+              <MenuItem value={addCategory}>Add New Category</MenuItem>
+              {
+                categoryList.map(category => {
+                  return (
+                    <MenuItem key={category.name} value={category.name}>{category.name}</MenuItem>
+                  )
+                })
+              }
             </TextField>
             <TextField
-              className={classes.status}
               select
+              className={classes.status}
               margin="dense"
               id={InventoryFormFieldIds.STATUS}
               label="Status"
               value={status}
-              onChange={(e) => onInventoryFormChange(InventoryFormFieldIds.STATUS, e.target.value)}
+              onChange={(e) => onStatusChange(e.target.value as string)}
             >
-              {[]}
+              <MenuItem value={addStatus}>Add New Status</MenuItem>
+              {
+                statusList.map(status => {
+                  return (
+                    <MenuItem key={status.name} value={status.name}>{status.name}</MenuItem>
+                  )
+                })
+              }
             </TextField>
           </Box>
           <Box display="flex" justifyContent="space-between">

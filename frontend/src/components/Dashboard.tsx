@@ -32,6 +32,14 @@ import { createInventory, listInventories } from '../services/inventory'
 import { InventoryResponse } from '../interfaces/inventory'
 import InventoryDialog from './inventory/InventoryDialog'
 import { useInventoryDialogState } from '../state/inventoryDialogState'
+import { createCategory, listCategories } from '../services/category'
+import { ListCategory } from '../interfaces/category'
+import { ListStatus } from '../interfaces/status'
+import { createStatus, listStatus } from '../services/status'
+import CategoryDialog from './category/categoryDialog'
+import StatusDialog from './status/statusDialog'
+import { useCategoryDialogState } from '../state/categoryDialog'
+import { useStatusDialogState } from '../state/statusDialogState'
 
 
 function Copyright() {
@@ -220,6 +228,130 @@ export default function Dashboard(): JSX.Element {
   }
   // END - Inventories state
 
+  // START - list of categories
+  let categoryList: ListCategory[] = []
+  const [categoryDialogState, setCategoryDialogState, onCategoryNameChange, openCategoryDialog, closeCategoryDialog, resetCategoryDialog] = useCategoryDialogState()
+  const getCategoriesList = async (collectionId?: number, access_token?: string) => {
+    let token = ''
+    if (!access_token) {
+      token = await getAccessToken()
+    } else {
+      token = access_token
+    }
+    if (!collectionId) {
+      const id = getSelectedCollectionId()
+      if (id) collectionId = id
+    }
+
+    try {
+      if (!collectionId) {
+        throw 'Collection id missing'
+      }
+      categoryList = await listCategories(token, collectionId)
+    } catch (categoryError) {
+      Logger.error('[LIST_CATEGORY] Failed to get list of categories', categoryError)
+      setDialogState({
+        title: 'Categories Error',
+        description: 'An unexpected error has occured while loading the list of categories for this collection, please contact a developer or an administrator. We apologize for the inconvenience.',
+        isError: true,
+        showDialog: true,
+        submitButtonText: 'Close'
+      })
+    }
+  }
+  const handleCategoryDialogSubmit = async () => {
+    setCategoryDialogState({
+      ...categoryDialogState,
+      loading: true
+    })
+    const collectionId = getSelectedCollectionId()
+    const token = await getAccessToken()
+    try {
+      if (!collectionId) throw 'No collection id'
+      await createCategory(token, {
+        name: categoryDialogState.name,
+        collectionId
+      })
+      resetCategoryDialog()
+      getCategoriesList(collectionId, token)
+      setSnackbarState({
+        showSnackbar: true,
+        message: 'Category created.'
+      })
+    } catch (error) {
+      Logger.error('[ADD_CATEGORY] Failed to add cateogry', error)
+      setDialogError()
+    } finally {
+      setCategoryDialogState({
+        ...categoryDialogState,
+        loading: false
+      })
+    }
+  }
+  // END - list of categories
+
+  // START - list of status
+  let statusList: ListStatus[] = []
+  const [statusDialogState, setStatusDialogState, onStatusNameChange, openStatusDialog, closeStatusDialog, resetStatusDialog] = useStatusDialogState()
+  const getStatusList = async (collectionId?: number, access_token?: string) => {
+    let token = ''
+    if (!access_token) {
+      token = await getAccessToken()
+    } else {
+      token = access_token
+    }
+    if (!collectionId) {
+      const id = getSelectedCollectionId()
+      if (id) collectionId = id
+    }
+
+    try {
+      if (!collectionId) {
+        throw 'Collection id missing'
+      }
+      statusList = await listStatus(token, collectionId)
+    } catch (statusError) {
+      Logger.error('[LIST_STATUS] Failed to get list of status', statusError)
+      setDialogState({
+        title: 'Status Error',
+        description: 'An unexpected error has occured while loading the list of status for this collection, please contact a developer or an administrator. We apologize for the inconvenience.',
+        isError: true,
+        showDialog: true,
+        submitButtonText: 'Close'
+      })
+    }
+  }
+  const handleStatusDialogSubmit = async () => {
+    setStatusDialogState({
+      ...statusDialogState,
+      loading: true
+    })
+    const collectionId = getSelectedCollectionId()
+    const token = await getAccessToken()
+    try {
+      if (!collectionId) throw 'No collection id'
+      await createStatus(token, {
+        name: statusDialogState.name,
+        collectionId
+      })
+      resetStatusDialog()
+      getStatusList(collectionId, token)
+      setSnackbarState({
+        showSnackbar: true,
+        message: 'Status created.'
+      })
+    } catch (error) {
+      Logger.error('[ADD_STATUS] Failed to add status', error)
+      setDialogError()
+    } finally {
+      setStatusDialogState({
+        ...statusDialogState,
+        loading: false
+      })
+    }
+  }
+  // END - list of status
+
   // Initial load after authentication
   useEffect(() => {
     if (isAuthenticated) {
@@ -242,7 +374,10 @@ export default function Dashboard(): JSX.Element {
           if (!collections) return
 
           // 4) Use first collectionId to get inventories (First collection is selected by default)
-          getInventories(collections[0].id, token)
+          const collectionId = collections[0].id
+          getInventories(collectionId, token)
+          getCategoriesList(collectionId, token)
+          getStatusList(collectionId, token)
         } catch (userError) {
           Logger.error('[GET_USER] Failed to get user details', userError)
           if (userError.response && userError.response.status === 401) {
@@ -331,6 +466,26 @@ export default function Dashboard(): JSX.Element {
           message={snackbarState.message}
           onClose={() => { closeSnackbar() }}
         />
+        <CategoryDialog
+          name={categoryDialogState.name}
+          showDialog={categoryDialogState.showDialog}
+          submitButtonLoading={categoryDialogState.loading}
+          submitButtonDisabled={categoryDialogState.loading}
+          onCategoryNameChange={onCategoryNameChange}
+          onSubmitClick={handleCategoryDialogSubmit}
+          onCancelClick={closeCategoryDialog}
+          onCloseDialog={closeCategoryDialog}
+        />
+        <StatusDialog
+          name={statusDialogState.name}
+          showDialog={statusDialogState.showDialog}
+          submitButtonLoading={statusDialogState.loading}
+          submitButtonDisabled={statusDialogState.loading}
+          onStatusNameChange={onStatusNameChange}
+          onSubmitClick={handleStatusDialogSubmit}
+          onCancelClick={closeStatusDialog}
+          onCloseDialog={closeStatusDialog}
+        />
         <CollectionDialog
           title={collectionDialogState.title}
           showDialog={collectionDialogState.showDialog}
@@ -355,12 +510,16 @@ export default function Dashboard(): JSX.Element {
           cost={inventoryDialogState.cost}
           salePrice={inventoryDialogState.salePrice}
           serialNumber={inventoryDialogState.serialNumber}
+          categoryList={categoryList}
+          statusList={statusList}
           submitButtonText={inventoryDialogState.submitButtonText}
           submitButtonLoading={inventoryDialogState.submitButtonLoading}
           submitButtonDisabled={inventoryDialogState.submitButtonDisabled}
           onInventoryFormChange={(key, value) => onInventoryFormChange(key, value)}
           onSubmitClick={() => addNewInventory()}
           onCancelClick={() => closeInventoryDialog()}
+          addNewCategory={() => openCategoryDialog()}
+          addNewStatus={() => openStatusDialog()}
         />
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { CreateStatusRequest, ListStatus } from "../interfaces/status";
 import ApiClient from "../utils/api";
 
-export const listStatus = async (token: string, collectionId: string): Promise<ListStatus[]> => {
+export const listStatus = async (token: string, collectionId: number): Promise<ListStatus[]> => {
   return (await ApiClient({
     method: 'GET',
     url: `/status/list/${collectionId}`,
@@ -23,7 +23,7 @@ export const createStatus = async (token: string, data: CreateStatusRequest): Pr
   }))
 }
 
-export const deleteStatus = async (token: string, statusName: string): Promise<AxiosResponse> => {
+export const deleteStatus = async (token: string, statusName: number): Promise<AxiosResponse> => {
   return (await ApiClient({
     method: 'DELETE',
     url: `/status/delete/${statusName}`,

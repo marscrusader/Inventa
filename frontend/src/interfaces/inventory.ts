@@ -1,3 +1,6 @@
+import { ListCategory } from "./category";
+import { ListStatus } from "./status";
+
 export interface InventoryResponse {
   id: string;
   name: string;
@@ -64,9 +67,13 @@ export interface InventoryDialogInterface {
   submitButtonLoading: boolean;
   submitButtonDisabled: boolean;
   cancelButtonText?: string;
+  categoryList: ListCategory[];
+  statusList: ListStatus[];
   onInventoryFormChange: (key: InventoryFormFieldIds, value: string | number) => void;
   onSubmitClick: React.MouseEventHandler<HTMLButtonElement>;
   onCancelClick: React.MouseEventHandler<HTMLButtonElement>;
+  addNewCategory: () => void;
+  addNewStatus: () => void;
 }
 
 export interface InventoryDialogStateInterface {

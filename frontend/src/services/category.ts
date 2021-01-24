@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { CreateCategoryRequest, ListCategory } from "../interfaces/category";
 import ApiClient from "../utils/api";
 
-export const listCategories = async (token: string, collectionId: string): Promise<ListCategory[]> => {
+export const listCategories = async (token: string, collectionId: number): Promise<ListCategory[]> => {
   return (await ApiClient({
     method: 'GET',
     url: `/category/list/${collectionId}`,

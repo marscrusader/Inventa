@@ -1,11 +1,11 @@
-import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { SimpleDialogInterface } from '../../interfaces/dialog';
-import LoadingButton from './LoadingButton';
+import React from 'react'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import { SimpleDialogInterface } from '../../interfaces/dialog'
+import LoadingButton from './LoadingButton'
 
 export default function SimpleDialog({
   title = 'Dialog title',
@@ -47,5 +47,5 @@ export default function SimpleDialog({
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }
