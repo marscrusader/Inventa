@@ -11,6 +11,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
+    "date-fns": "^2.16.1",
     "loglevel": "^1.7.1",
     "mui-datatables": "^3.7.4",
     "react": "^17.0.1",

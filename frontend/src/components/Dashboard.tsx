@@ -211,10 +211,10 @@ export default function Dashboard(): JSX.Element {
         cost,
         salePrice
       })
-      getCollections(token, userState.id)
+      getInventories(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
-        message: 'Collection created.'
+        message: 'Inventory created.'
       })
     } catch (addCollectionError) {
       Logger.error('[ADD_COLLECTION] Failed to add new collection', addCollectionError)

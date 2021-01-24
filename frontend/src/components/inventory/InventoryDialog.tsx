@@ -45,9 +45,6 @@ const useStyles = makeStyles((theme) => ({
   },
   salePrice: {
     width: '47.5%'
-  },
-  menuItem: {
-    flex: 1
   }
 }))
 
@@ -171,9 +168,7 @@ export default function InventoryDialog({
               {
                 categoryList.map(category => {
                   return (
-                    <Box key={category.name} display="flex" justifyContent="space-between">
-                      <MenuItem key={category.name} value={category.name} className={classes.menuItem}>{category.name}</MenuItem>
-                    </Box>
+                    <MenuItem key={category.name} value={category.name}>{category.name}</MenuItem>
                   )
                 })
               }

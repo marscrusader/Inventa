@@ -23,7 +23,7 @@ export default class InventoryController extends BaseController {
         where: {
           collectionId
         },
-        attributes: ['name', 'description', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId', 'createdAt']
+        attributes: ['name', 'description', 'quantity', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId', 'createdAt']
       })
       logger.info(`[LIST_INVENTORIES] Successfully retrive list of inventories, total of ${inventories.length} inventories`)
       return this.ok(res, inventories.map(inventory => {
@@ -64,7 +64,7 @@ export default class InventoryController extends BaseController {
         where: {
           id
         },
-        attributes: ['id', 'name', 'description', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId']
+        attributes: ['id', 'name', 'description', 'quantity', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId']
       })
       logger.info('[FIND_INVENTORY] Successfully retrieved inventory with id=', inventory?.id)
       if (!inventory) {
