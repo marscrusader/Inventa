@@ -13,8 +13,8 @@ export interface InventoryAttributes {
   status?: string;
   cost?: number;
   salePrice?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface InventoryModelInterface extends Model<InventoryAttributes>, InventoryAttributes { }
@@ -42,11 +42,10 @@ export interface UpdateInventoryRequest {
   name: string;
   description: string;
   category: string;
-  collectionId: number;
   quantity: number;
   s3Id: string;
-  s3ThumbnailId: string;
-  serialNumber: string;
+  s3ThumbnailId?: string;
+  serialNumber?: string;
   status: string;
   cost: number;
   salePrice: number;

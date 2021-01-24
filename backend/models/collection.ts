@@ -24,15 +24,16 @@ const CollectionModel: CollectionStatic = SequelizeSetup.define('collections', {
   s3ThumbnailId: {
     type: DataTypes.TEXT
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE
   }
 }, {
   schema: 'inventa',
-  tableName: 'collections'
+  tableName: 'collections',
+  timestamps: false
 })
 
 CollectionModel.belongsTo(UserModel, { foreignKey: 'userId' })

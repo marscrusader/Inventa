@@ -23,11 +23,11 @@ export default class InventoryController extends BaseController {
         where: {
           collectionId
         },
-        attributes: ['name', 'description', 'quantity', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId', 'createdAt']
+        attributes: ['id', 'name', 'description', 'quantity', 'category', 'serialNumber', 'status', 'cost', 'salePrice', 's3Id', 's3ThumbnailId', 'created_at']
       })
       logger.info(`[LIST_INVENTORIES] Successfully retrive list of inventories, total of ${inventories.length} inventories`)
       return this.ok(res, inventories.map(inventory => {
-        const { id, name, description, category, s3ThumbnailId, serialNumber, status, cost, salePrice, quantity, s3Id, createdAt } = inventory
+        const { id, name, description, category, s3ThumbnailId, serialNumber, status, cost, salePrice, quantity, s3Id, created_at } = inventory
         return {
           id,
           name,
@@ -36,7 +36,7 @@ export default class InventoryController extends BaseController {
           cost,
           salePrice,
           s3Id,
-          createdAt,
+          created_at,
           category,
           s3ThumbnailId,
           serialNumber,
@@ -126,7 +126,7 @@ export default class InventoryController extends BaseController {
       })
       logger.info('[CREATE_INVENTORY] Successfully created inventory with id=', inventory.id)
     } catch (createError) {
-      logger.error('[CREATE_INVENTORY] Failed to create inventory for collectionId=', collectionId)
+      logger.error(`[CREATE_INVENTORY] Failed to create inventory for collectionId=${collectionId}`, createError)
       return this.internalServerError(res)
     }
     return this.ok(res)
@@ -158,12 +158,12 @@ export default class InventoryController extends BaseController {
 
   // START - update inventory
   public async update(req: Request, res: Response, next: NextFunction) {
-    const { id, name, description, quantity, category, collectionId, s3Id, s3ThumbnailId, serialNumber, cost, status, salePrice }: UpdateInventoryRequest = req.body
+    const { id, name, description, quantity, category, s3Id, s3ThumbnailId, serialNumber, cost, status, salePrice }: UpdateInventoryRequest = req.body
     logger.info('[UPDATE_INVENTORY] Receive request to update inventory with id=', id)
 
     // 1) Validate
-    if (!id || !collectionId) {
-      logger.error('[UPDATE_INVENTORY] Missing id or collection id')
+    if (!id) {
+      logger.error('[UPDATE_INVENTORY] Missing id')
       return this.clientError(res)
     }
 
@@ -175,7 +175,6 @@ export default class InventoryController extends BaseController {
         description,
         category,
         quantity,
-        collectionId,
         s3Id,
         s3ThumbnailId,
         serialNumber,
@@ -187,6 +186,7 @@ export default class InventoryController extends BaseController {
           id
         }
       })
+      return this.ok(res)
     } catch (updateError) {
       logger.error(`[UPDATE_INVENTORY] Failed to update inventory with id=${id}`, updateError)
       return this.internalServerError(res)

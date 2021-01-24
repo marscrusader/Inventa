@@ -30,7 +30,7 @@ import { useCollectionDialogState } from '../state/collectionDialogState'
 import { useUserState } from '../state/user'
 import AppBar from './AppBar'
 import Drawer from './Drawer'
-import { createInventory, listInventories } from '../services/inventory'
+import { createInventory, listInventories, updateInventory } from '../services/inventory'
 import { InventoryResponse } from '../interfaces/inventory'
 import InventoryDialog from './inventory/InventoryDialog'
 import { useInventoryDialogState } from '../state/inventoryDialogState'
@@ -170,7 +170,6 @@ export default function Dashboard(): JSX.Element {
     // 2) Use token to get list of inventories for selected collection
     try {
       const inventories = await listInventories(token, collectionId)
-      console.log(inventories)
       setInventoriesState(inventories)
     } catch (inventoriesError) {
       Logger.error('[LIST_INVENTORIES] Failed to get list of inventories for collectionId=', collectionId)
@@ -216,12 +215,55 @@ export default function Dashboard(): JSX.Element {
         showSnackbar: true,
         message: 'Inventory created.'
       })
-    } catch (addCollectionError) {
-      Logger.error('[ADD_COLLECTION] Failed to add new collection', addCollectionError)
+    } catch (addInventoryError) {
+      Logger.error('[ADD_INVENTORY] Failed to add new inventory', addInventoryError)
       setDialogError()
     } finally {
-      setCollectionDialogState({
-        ...collectionDialogState,
+      setInventoryDialogState({
+        ...inventoryDialogState,
+        showDialog: false,
+        submitButtonLoading: false,
+        submitButtonDisabled: false
+      })
+    }
+  }
+  const updateSelectedInventory = async () => {
+    setInventoryDialogState({
+      ...inventoryDialogState,
+      submitButtonLoading: true,
+      submitButtonDisabled: true
+    })
+    // 1) Get the access token
+    const token = await getAccessToken()
+    // 2) Update inventory
+    const collectionId = getSelectedCollectionId()
+    try {
+      if (!collectionId) {
+        throw 'Collection id missing'
+      }
+      const { inventoryId, inventoryName, inventoryDescription, category, quantity, status, serialNumber, cost, salePrice } = inventoryDialogState
+      await updateInventory(token, {
+        id: inventoryId,
+        name: inventoryName,
+        description: inventoryDescription,
+        category,
+        quantity,
+        serialNumber,
+        status,
+        cost,
+        salePrice
+      })
+      getInventories(collectionId, token)
+      setSnackbarState({
+        showSnackbar: true,
+        message: 'Inventory updated.'
+      })
+    } catch (updateError) {
+      Logger.error(`[UPDATE_INVENTORY] Failed to update inventory with id ${inventoryDialogState.inventoryId}`, updateError)
+      setDialogError()
+    } finally {
+      setInventoryDialogState({
+        ...inventoryDialogState,
         showDialog: false,
         submitButtonLoading: false,
         submitButtonDisabled: false
@@ -376,6 +418,7 @@ export default function Dashboard(): JSX.Element {
           if (!collections) return
 
           // 4) Use first collectionId to get inventories (First collection is selected by default)
+          if (!collections.length) return
           const collectionId = collections[0].id
           getInventories(collectionId, token)
           getCategoriesList(collectionId, token)
@@ -430,7 +473,7 @@ export default function Dashboard(): JSX.Element {
         </Paper>
       )
     }
-    return (<Inventories openCreateInventoryDialog={openCreateInventoryDialog} inventoriesState={inventoriesState} />)
+    return (<Inventories openUpdateInventoryDialog={setInventoryDialogState} openCreateInventoryDialog={openCreateInventoryDialog} inventoriesState={inventoriesState} />)
   }
 
   return (
@@ -493,7 +536,7 @@ export default function Dashboard(): JSX.Element {
           categoryList={categoryList}
           statusList={statusList}
           onInventoryFormChange={(key, value) => onInventoryFormChange(key, value)}
-          onSubmitClick={() => addNewInventory()}
+          onSubmitClick={() => { inventoryDialogState.submitButtonText === 'Create' ? addNewInventory() : updateSelectedInventory() }}
           onCancelClick={() => closeInventoryDialog()}
           addNewCategory={() => openCategoryDialog()}
           addNewStatus={() => openStatusDialog()}

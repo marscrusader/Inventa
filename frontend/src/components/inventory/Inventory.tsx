@@ -12,6 +12,12 @@ import EmptyImage from '../../static/empty.jpg'
 
 const columns = [
   {
+    name: "id",
+    options: {
+      display: 'excluded' as any
+    }
+  },
+  {
     name: "name",
     label: "Name",
     options: {
@@ -68,7 +74,7 @@ const columns = [
     }
   },
   {
-    name: "createdAt",
+    name: "created_at",
     label: "Created At",
     options: {
       sort: false,
@@ -76,10 +82,6 @@ const columns = [
     }
   }
 ]
-
-const options = {
-  filterType: 'checkbox' as any,
-}
 
 const useTableStyles = makeStyles((theme) => ({
   titleWrapper: {
@@ -112,10 +114,39 @@ const useTableStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Inventories({ inventoriesState, openCreateInventoryDialog }: InventoryComponentProps): JSX.Element {
+export default function Inventories({ inventoriesState, openCreateInventoryDialog, openUpdateInventoryDialog }: InventoryComponentProps): JSX.Element {
   const classes = useTableStyles()
 
+  const options = {
+    filterType: 'checkbox' as any,
+    onRowClick: (rowData: string[]) => {
+      // rowData returns an array of string (the row datas)
+      const selectedInventory = inventoriesState.find(inventory => inventory.id === +rowData[0])
+      if (selectedInventory) {
+        const { id, name, description, category, quantity, status, cost, salePrice, serialNumber } = selectedInventory
+        openUpdateInventoryDialog({
+          dialogTitle: 'Update inventory',
+          dialogDescription: '',
+          submitButtonText: 'Update',
+          showDialog: true,
+          inventoryId: id,
+          inventoryName: name,
+          inventoryDescription: description,
+          category,
+          quantity,
+          status,
+          cost,
+          salePrice,
+          serialNumber,
+          submitButtonLoading: false,
+          submitButtonDisabled: false
+        })
+      }
+    }
+  }
+
   const inventoriesData = () => inventoriesState.map(inventory => ({
+    id: inventory.id,
     name: inventory.name,
     serialNumber: inventory.serialNumber,
     quantity: inventory.quantity,
@@ -123,7 +154,7 @@ export default function Inventories({ inventoriesState, openCreateInventoryDialo
     status: inventory.status,
     cost: inventory.cost,
     salePrice: inventory.salePrice,
-    createdAt: inventory.createdAt
+    created_at: inventory.created_at
   }))
 
   const tableTitle = () => {

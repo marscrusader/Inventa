@@ -6,8 +6,8 @@ export interface CollectionAttributes {
   userId: number;
   s3Id?: string;
   s3ThumbnailId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface CollectionModelInterface extends Model<CollectionAttributes>, CollectionAttributes { }

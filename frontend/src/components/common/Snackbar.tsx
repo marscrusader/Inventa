@@ -7,7 +7,7 @@ const Alert = (props: AlertProps) => <MuiAlert elevation={6} variant="filled" {.
 
 export default function CustomSnackbar({ showSnackbar, message, onClose }: SnackbarInterface): JSX.Element {
   return (
-    <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={onClose}>
+    <Snackbar open={showSnackbar} autoHideDuration={4000} onClose={onClose}>
       <Alert onClose={onClose} severity="success">
         {message}
       </Alert>

@@ -2,11 +2,11 @@
 
 BEGIN;
 
--- Update updatedAt function
+-- Update updated_at function
 CREATE OR REPLACE FUNCTION trigger_inventories_set_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-  NEW.updatedAt = NOW();
+  NEW.updated_at = NOW();
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -26,17 +26,9 @@ CREATE TABLE inventa.inventories
   "status" character varying(50),
   "cost" integer,
   "salePrice" integer,
-  "createdAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT inventories_pkey PRIMARY KEY (id),
-  CONSTRAINT "inventories_status_fkey" FOREIGN KEY ("status")
-        REFERENCES inventa.status ("name") MATCH SIMPLE
-        ON UPDATE SET NULL
-        ON DELETE SET NULL,
-  CONSTRAINT "inventories_category_fkey" FOREIGN KEY ("category")
-        REFERENCES inventa.categories ("name") MATCH SIMPLE
-        ON UPDATE SET NULL
-        ON DELETE SET NULL,
   CONSTRAINT "inventories_collection_fkey" FOREIGN KEY ("collectionId")
         REFERENCES inventa.collections (id) MATCH SIMPLE
         ON UPDATE CASCADE

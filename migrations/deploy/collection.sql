@@ -2,11 +2,11 @@
 
 BEGIN;
 
--- Update updatedAt function
+-- Update updated_at function
 CREATE OR REPLACE FUNCTION trigger_collections_set_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-  NEW.updatedAt = NOW();
+  NEW."updated_at" = NOW();
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -20,8 +20,8 @@ CREATE TABLE inventa.collections
   "userId" integer NOT NULL,
   "s3Id" text,
   "s3ThumbnailId" text,
-  "createdAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT collections_pkey PRIMARY KEY (id),
   CONSTRAINT "collections_userId_fkey" FOREIGN KEY ("userId")
         REFERENCES inventa.users (id) MATCH SIMPLE

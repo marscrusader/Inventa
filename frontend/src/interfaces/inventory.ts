@@ -2,14 +2,14 @@ import { ListCategory } from "./category";
 import { ListStatus } from "./status";
 
 export interface InventoryResponse {
-  id: string;
+  id: number;
   name: string;
   description: string;
   cost: number;
   salePrice: number;
   quantity: number;
   s3Id: string;
-  createdAt: Date;
+  created_at: Date;
   category: string;
   s3ThumbnailId: string;
   serialNumber: string;
@@ -35,10 +35,9 @@ export interface UpdateInventoryRequest {
   name: string;
   description: string;
   category: string;
-  collectionId: number;
   quantity: number;
-  s3Id: string;
-  s3ThumbnailId: string;
+  s3Id?: string;
+  s3ThumbnailId?: string;
   serialNumber: string;
   status: string;
   cost: number;
@@ -48,6 +47,7 @@ export interface UpdateInventoryRequest {
 export interface InventoryComponentProps {
   inventoriesState: InventoryResponse[];
   openCreateInventoryDialog: () => void;
+  openUpdateInventoryDialog: (state: InventoryDialogStateInterface) => void;
 }
 
 export interface InventoryDialogInterface {
@@ -65,6 +65,7 @@ export interface InventoryDialogInterface {
 export interface InventoryDialogStateInterface {
   dialogTitle: string;
   dialogDescription: string;
+  inventoryId: number;
   inventoryName: string;
   inventoryDescription: string;
   category: string;

@@ -109,9 +109,9 @@ export default function InventoryDialog({
       <Dialog open={showDialog} onClose={onCancelClick} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{dialogTitle}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {dialogDescription}
-          </DialogContentText>
+          {
+            !!dialogDescription && <DialogContentText>{dialogDescription}</DialogContentText>
+          }
           <TextField
             className={classes.name}
             required

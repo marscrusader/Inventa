@@ -13,6 +13,7 @@ export const useInventoryDialogState = (): [
     dialogTitle: '',
     dialogDescription: '',
     inventoryName: '',
+    inventoryId: 0,
     inventoryDescription: '',
     category: '',
     quantity: 1,

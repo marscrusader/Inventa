@@ -48,15 +48,16 @@ const InventoryModel: InventoryStatic = SequelizeSetup.define('inventories', {
   salePrice: {
     type: DataTypes.INTEGER
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE
   }
 }, {
   schema: 'inventa',
-  tableName: 'inventories'
+  tableName: 'inventories',
+  timestamps: false
 })
 
 InventoryModel.belongsTo(CollectionModel, { foreignKey: 'collectionId' })
