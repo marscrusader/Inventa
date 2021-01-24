@@ -19,16 +19,14 @@ const useStyles = makeStyles((_theme) => ({
 }))
 
 export default function CategoryDialog({
-  name = '',
-  showDialog = false,
-  submitButtonLoading = false,
-  submitButtonDisabled = false,
+  categoryDialogState,
   onCategoryNameChange,
   onSubmitClick,
   onCancelClick,
   onCloseDialog
 }: CreateCategoryDialog): JSX.Element {
   const classes = useStyles()
+  const { showDialog, name, submitButtonDisabled, submitButtonLoading } = categoryDialogState
   return (
     <div>
       <Dialog

@@ -8,10 +8,7 @@ export interface CreateStatusRequest {
 }
 
 export interface CreateStatusDialog {
-  name: string;
-  showDialog: boolean;
-  submitButtonLoading?: boolean;
-  submitButtonDisabled?: boolean;
+  statusDialogState: StatusDialogState;
   onStatusNameChange: (value: string) => void;
   onSubmitClick: React.MouseEventHandler<HTMLButtonElement>;
   onCancelClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -22,4 +19,6 @@ export interface StatusDialogState {
   name: string;
   loading: boolean;
   showDialog: boolean;
+  submitButtonLoading?: boolean;
+  submitButtonDisabled?: boolean;
 }

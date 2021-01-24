@@ -21,14 +21,7 @@ export interface UpdateCollectionRequest {
 }
 
 export interface CollectionDialogInterface {
-  title: string;
-  description: string;
-  collectionName: string;
-  showDialog: boolean;
-  submitButtonText?: string;
-  submitButtonLoading: boolean;
-  submitButtonDisabled: boolean;
-  cancelButtonText?: string;
+  collectionDialogState: CollectionDialogStateInterface;
   onCollectionNameChange: (value: string) => void;
   onSubmitClick: React.MouseEventHandler<HTMLButtonElement>;
   onCancelClick: React.MouseEventHandler<HTMLButtonElement>;

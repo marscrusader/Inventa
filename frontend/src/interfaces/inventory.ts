@@ -51,21 +51,7 @@ export interface InventoryComponentProps {
 }
 
 export interface InventoryDialogInterface {
-  dialogTitle: string;
-  dialogDescription?: string;
-  inventoryName: string;
-  inventoryDescription?: string;
-  category?: string;
-  quantity: number;
-  s3Id?: string;
-  serialNumber?: string;
-  status?: string;
-  cost?: number;
-  salePrice?: number;
-  showDialog: boolean;
-  submitButtonText?: string;
-  submitButtonLoading: boolean;
-  submitButtonDisabled: boolean;
+  inventoryDialogState: InventoryDialogStateInterface;
   cancelButtonText?: string;
   categoryList: ListCategory[];
   statusList: ListStatus[];

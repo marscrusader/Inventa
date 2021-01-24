@@ -8,10 +8,7 @@ export interface CreateCategoryRequest {
 }
 
 export interface CreateCategoryDialog {
-  name: string;
-  showDialog: boolean;
-  submitButtonLoading?: boolean;
-  submitButtonDisabled?: boolean;
+  categoryDialogState: CategoryDialogState;
   onCategoryNameChange: (value: string) => void;
   onSubmitClick: React.MouseEventHandler<HTMLButtonElement>;
   onCancelClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -22,4 +19,6 @@ export interface CategoryDialogState {
   name: string;
   loading: boolean;
   showDialog: boolean;
+  submitButtonLoading?: boolean;
+  submitButtonDisabled?: boolean;
 }

@@ -20,8 +20,9 @@ const useStyles = makeStyles((_theme) => ({
 }))
 
 
-export default function CollectionDialog({ title, description, showDialog, collectionName, cancelButtonText = "Cancel", submitButtonText = "Create", submitButtonLoading, submitButtonDisabled, onSubmitClick, onCancelClick, onCollectionNameChange }: CollectionDialogInterface): JSX.Element {
+export default function CollectionDialog({ collectionDialogState, onSubmitClick, onCancelClick, onCollectionNameChange }: CollectionDialogInterface): JSX.Element {
   const classes = useStyles()
+  const { showDialog, title, description, submitButtonDisabled, submitButtonText, submitButtonLoading, collectionName } = collectionDialogState
   return (
     <div>
       <Dialog open={showDialog} onClose={onCancelClick} aria-labelledby="form-dialog-title">
@@ -42,7 +43,7 @@ export default function CollectionDialog({ title, description, showDialog, colle
           />
         </DialogContent>
         <DialogActions>
-          <LoadingButton text={cancelButtonText} onClick={onCancelClick} loading={false} disabled={false} buttonStyle={classes.cancelButton}>
+          <LoadingButton text="Cancel" onClick={onCancelClick} loading={false} disabled={false} buttonStyle={classes.cancelButton}>
           </LoadingButton>
           <LoadingButton text={submitButtonText} onClick={onSubmitClick} loading={submitButtonLoading} disabled={submitButtonDisabled} color="primary">
           </LoadingButton>

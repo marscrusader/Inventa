@@ -469,54 +469,29 @@ export default function Dashboard(): JSX.Element {
           onClose={() => { closeSnackbar() }}
         />
         <CategoryDialog
-          name={categoryDialogState.name}
-          showDialog={categoryDialogState.showDialog}
-          submitButtonLoading={categoryDialogState.loading}
-          submitButtonDisabled={categoryDialogState.loading}
+          categoryDialogState={categoryDialogState}
           onCategoryNameChange={onCategoryNameChange}
           onSubmitClick={handleCategoryDialogSubmit}
           onCancelClick={closeCategoryDialog}
           onCloseDialog={closeCategoryDialog}
         />
         <StatusDialog
-          name={statusDialogState.name}
-          showDialog={statusDialogState.showDialog}
-          submitButtonLoading={statusDialogState.loading}
-          submitButtonDisabled={statusDialogState.loading}
+          statusDialogState={statusDialogState}
           onStatusNameChange={onStatusNameChange}
           onSubmitClick={handleStatusDialogSubmit}
           onCancelClick={closeStatusDialog}
           onCloseDialog={closeStatusDialog}
         />
         <CollectionDialog
-          title={collectionDialogState.title}
-          showDialog={collectionDialogState.showDialog}
-          description={collectionDialogState.description}
-          submitButtonText={collectionDialogState.submitButtonText}
-          submitButtonLoading={collectionDialogState.submitButtonLoading}
-          submitButtonDisabled={collectionDialogState.submitButtonDisabled}
-          collectionName={collectionDialogState.collectionName}
+          collectionDialogState={collectionDialogState}
           onCollectionNameChange={(val) => { onCollectionNameChange(val) }}
           onSubmitClick={() => addNewCollection()}
           onCancelClick={() => closeCollectionDialog()}
         />
         <InventoryDialog
-          showDialog={inventoryDialogState.showDialog}
-          dialogTitle={inventoryDialogState.dialogTitle}
-          dialogDescription={inventoryDialogState.dialogDescription}
-          inventoryName={inventoryDialogState.inventoryName}
-          inventoryDescription={inventoryDialogState.inventoryDescription}
-          category={inventoryDialogState.category}
-          status={inventoryDialogState.status}
-          quantity={inventoryDialogState.quantity}
-          cost={inventoryDialogState.cost}
-          salePrice={inventoryDialogState.salePrice}
-          serialNumber={inventoryDialogState.serialNumber}
+          inventoryDialogState={inventoryDialogState}
           categoryList={categoryList}
           statusList={statusList}
-          submitButtonText={inventoryDialogState.submitButtonText}
-          submitButtonLoading={inventoryDialogState.submitButtonLoading}
-          submitButtonDisabled={inventoryDialogState.submitButtonDisabled}
           onInventoryFormChange={(key, value) => onInventoryFormChange(key, value)}
           onSubmitClick={() => addNewInventory()}
           onCancelClick={() => closeInventoryDialog()}

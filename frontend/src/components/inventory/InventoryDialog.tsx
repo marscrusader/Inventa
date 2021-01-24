@@ -59,24 +59,11 @@ enum statusActions {
 }
 
 export default function InventoryDialog({
-  dialogTitle,
-  inventoryName,
-  dialogDescription,
-  inventoryDescription,
-  showDialog,
-  category,
-  status,
-  quantity,
-  cost,
-  salePrice,
-  serialNumber,
+  inventoryDialogState,
   onInventoryFormChange,
   categoryList,
   statusList,
   cancelButtonText = "Cancel",
-  submitButtonText = "Create",
-  submitButtonLoading,
-  submitButtonDisabled,
   onSubmitClick,
   onCancelClick,
   addNewCategory,
@@ -99,6 +86,23 @@ export default function InventoryDialog({
     }
     onInventoryFormChange(InventoryFormFieldIds.STATUS, value)
   }
+
+  const {
+    showDialog,
+    dialogDescription,
+    dialogTitle,
+    inventoryDescription,
+    inventoryName,
+    quantity,
+    category,
+    status,
+    cost,
+    salePrice,
+    serialNumber,
+    submitButtonDisabled,
+    submitButtonLoading,
+    submitButtonText
+  } = inventoryDialogState
 
   return (
     <div>

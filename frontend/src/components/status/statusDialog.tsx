@@ -20,16 +20,14 @@ const useStyles = makeStyles((_theme) => ({
 
 
 export default function StatusDialog({
-  name = '',
-  showDialog = false,
-  submitButtonLoading = false,
-  submitButtonDisabled = false,
+  statusDialogState,
   onStatusNameChange,
   onSubmitClick,
   onCancelClick,
   onCloseDialog
 }: CreateStatusDialog): JSX.Element {
   const classes = useStyles()
+  const { showDialog, submitButtonLoading, submitButtonDisabled, name } = statusDialogState
   return (
     <div>
       <Dialog
