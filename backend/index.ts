@@ -9,6 +9,7 @@ import collectionRoutes from './routes/collection'
 import categoryRoutes from './routes/category'
 import statusRoutes from './routes/status'
 import inventoryRoutes from './routes/inventory'
+import fileRoutes from './routes/file'
 
 // Set up env
 dotenv.config()
@@ -30,6 +31,7 @@ app.use('/collection', collectionRoutes)
 app.use('/category', categoryRoutes)
 app.use('/status', statusRoutes)
 app.use('/inventory', inventoryRoutes)
+app.use('/file', fileRoutes)
 
 
 // Global unauthorized error handling
