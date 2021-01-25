@@ -1,20 +1,27 @@
 import React from 'react'
 import MUIDataTable from "mui-datatables"
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import { makeStyles } from "@material-ui/core";
+import {
+  Typography,
+  Divider,
+  Paper,
+  Button,
+  IconButton,
+  Tooltip,
+  makeStyles
+} from '@material-ui/core'
 import { InventoryComponentProps } from '../../interfaces/inventory';
-import Paper from '@material-ui/core/Paper'
-import Button from '@material-ui/core/Button'
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
 import EmptyImage from '../../static/empty.jpg'
+import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 
 
 const columns = [
   {
     name: "id",
     options: {
-      display: 'excluded' as any
+      display: 'excluded' as any,
+      sort: false,
+      filter: false
     }
   },
   {
@@ -114,11 +121,30 @@ const useTableStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Inventories({ inventoriesState, openCreateInventoryDialog, openUpdateInventoryDialog }: InventoryComponentProps): JSX.Element {
+export default function Inventories({ inventoriesState, deleteInventories, openCreateInventoryDialog, openUpdateInventoryDialog }: InventoryComponentProps): JSX.Element {
   const classes = useTableStyles()
+
+  const customToolbarIcon = () => {
+    return (
+      <Tooltip title="New Inventory">
+        <IconButton onClick={() => { openCreateInventoryDialog() }}>
+          <AddOutlinedIcon />
+        </IconButton>
+      </Tooltip>
+    )
+  }
 
   const options = {
     filterType: 'checkbox' as any,
+    responsive: 'simple' as any,
+    print: false,
+    download: false,
+    onRowsDelete: (rowsDeleted: { lookup: { [dataIndex: number]: boolean; }; data: { index: number; dataIndex: number; }[]; }, _newTableData: any[]) => {
+      // dataIndex is initial index of the table, according to 'mui-datatables' package
+      const inventories = rowsDeleted.data.map(row => inventoriesData()[row.dataIndex].id)
+      deleteInventories(inventories)
+    },
+    customToolbar: () => customToolbarIcon(),
     onRowClick: (rowData: string[]) => {
       // rowData returns an array of string (the row datas)
       const selectedInventory = inventoriesState.find(inventory => inventory.id === +rowData[0])

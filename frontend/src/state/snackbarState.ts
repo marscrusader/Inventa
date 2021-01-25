@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { SnackbarStateInterface } from "../interfaces/snackbar"
+import { SnackbarStateInterface, SnackbarTheme } from "../interfaces/snackbar"
 
 
 const snackbarInitState = {
   showSnackbar: false,
-  message: ''
+  message: '',
+  theme: 'success' as SnackbarTheme
 }
 
 export const useSnackbarState = (): [

@@ -30,7 +30,7 @@ import { useCollectionDialogState } from '../state/collectionDialogState'
 import { useUserState } from '../state/user'
 import AppBar from './AppBar'
 import Drawer from './Drawer'
-import { createInventory, listInventories, updateInventory } from '../services/inventory'
+import { createInventory, deleteInventory, listInventories, updateInventory } from '../services/inventory'
 import { InventoryResponse } from '../interfaces/inventory'
 import InventoryDialog from './inventory/InventoryDialog'
 import { useInventoryDialogState } from '../state/inventoryDialogState'
@@ -131,7 +131,8 @@ export default function Dashboard(): JSX.Element {
       getCollections(token, userState.id)
       setSnackbarState({
         showSnackbar: true,
-        message: 'Collection created.'
+        message: 'Collection created.',
+        theme: 'success'
       })
     } catch (addCollectionError) {
       Logger.error('[ADD_COLLECTION] Failed to add new collection', addCollectionError)
@@ -213,7 +214,8 @@ export default function Dashboard(): JSX.Element {
       getInventories(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
-        message: 'Inventory created.'
+        message: 'Inventory created.',
+        theme: 'success'
       })
     } catch (addInventoryError) {
       Logger.error('[ADD_INVENTORY] Failed to add new inventory', addInventoryError)
@@ -256,7 +258,8 @@ export default function Dashboard(): JSX.Element {
       getInventories(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
-        message: 'Inventory updated.'
+        message: 'Inventory updated.',
+        theme: 'success'
       })
     } catch (updateError) {
       Logger.error(`[UPDATE_INVENTORY] Failed to update inventory with id ${inventoryDialogState.inventoryId}`, updateError)
@@ -268,6 +271,27 @@ export default function Dashboard(): JSX.Element {
         submitButtonLoading: false,
         submitButtonDisabled: false
       })
+    }
+  }
+  const deleteInventories = async (inventoryIds: number[]) => {
+    const token = await getAccessToken()
+    try {
+      await Promise.all(inventoryIds.map(id => deleteInventory(token, id)))
+      setSnackbarState({
+        showSnackbar: true,
+        message: inventoryIds.length > 1 ? 'Inventories deleted.' : 'Inventory deleted.',
+        theme: 'success'
+      })
+    } catch (deleteError) {
+      Logger.error('[DELETE_INVENTORIES] Failed to delete inventories with ids=', inventoryIds)
+      setSnackbarState({
+        showSnackbar: true,
+        message: inventoryIds.length > 1 ? 'Error deleting inventories, please try again.' : 'Error deleting inventory, please try again.',
+        theme: 'error'
+      })
+      const collectionId = getSelectedCollectionId()
+      if (!collectionId) return
+      getInventories(collectionId, token)
     }
   }
   // END - Inventories state
@@ -321,7 +345,8 @@ export default function Dashboard(): JSX.Element {
       getCategoriesList(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
-        message: 'Category created.'
+        message: 'Category created.',
+        theme: 'success'
       })
     } catch (error) {
       Logger.error('[ADD_CATEGORY] Failed to add cateogry', error)
@@ -382,7 +407,8 @@ export default function Dashboard(): JSX.Element {
       getStatusList(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
-        message: 'Status created.'
+        message: 'Status created.',
+        theme: 'success'
       })
       resetStatusDialog()
     } catch (error) {
@@ -473,7 +499,14 @@ export default function Dashboard(): JSX.Element {
         </Paper>
       )
     }
-    return (<Inventories openUpdateInventoryDialog={setInventoryDialogState} openCreateInventoryDialog={openCreateInventoryDialog} inventoriesState={inventoriesState} />)
+    return (
+      <Inventories
+        openUpdateInventoryDialog={setInventoryDialogState}
+        openCreateInventoryDialog={openCreateInventoryDialog}
+        inventoriesState={inventoriesState}
+        deleteInventories={deleteInventories}
+      />
+    )
   }
 
   return (
@@ -507,6 +540,7 @@ export default function Dashboard(): JSX.Element {
           onCloseDialog={handleCloseDialog}
         />
         <Snackbar
+          theme={snackbarState.theme}
           showSnackbar={snackbarState.showSnackbar}
           message={snackbarState.message}
           onClose={() => { closeSnackbar() }}
