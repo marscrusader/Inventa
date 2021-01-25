@@ -174,10 +174,10 @@ export default function Inventories({ inventoriesState, deleteInventories, openC
   const inventoriesData = () => inventoriesState.map(inventory => ({
     id: inventory.id,
     name: inventory.name,
-    serialNumber: inventory.serialNumber,
-    quantity: inventory.quantity,
-    category: inventory.category,
-    status: inventory.status,
+    serialNumber: inventory.serialNumber ? inventory.serialNumber : '-',
+    quantity: inventory.quantity ? inventory.quantity : '-',
+    category: inventory.category ? inventory.category : '-',
+    status: inventory.status ? inventory.status : '-',
     cost: inventory.cost,
     salePrice: inventory.salePrice,
     created_at: inventory.created_at
