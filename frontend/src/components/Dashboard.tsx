@@ -509,6 +509,21 @@ export default function Dashboard(): JSX.Element {
     )
   }
 
+  const onFileUpload = (file: File) => {
+    console.log(file)
+    setInventoryDialogState({
+      ...inventoryDialogState,
+      image: file
+    })
+  }
+
+  const clearFile = () => {
+    setInventoryDialogState({
+      ...inventoryDialogState,
+      image: undefined
+    })
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -574,6 +589,8 @@ export default function Dashboard(): JSX.Element {
           onCancelClick={() => closeInventoryDialog()}
           addNewCategory={() => openCategoryDialog()}
           addNewStatus={() => openStatusDialog()}
+          onFileUpload={(file) => onFileUpload(file)}
+          clearFile={() => { clearFile() }}
         />
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

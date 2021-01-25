@@ -12,6 +12,7 @@ import {
   Divider
 } from '@material-ui/core'
 import LoadingButton from '../common/LoadingButton'
+import Dropzone from '../common/Dropzone'
 import { InventoryDialogInterface, InventoryFormFieldIds } from '../../interfaces/inventory'
 
 
@@ -68,6 +69,8 @@ export default function InventoryDialog({
   onCancelClick,
   addNewCategory,
   addNewStatus,
+  onFileUpload,
+  clearFile
 }: InventoryDialogInterface): JSX.Element {
   const classes = useStyles()
 
@@ -112,6 +115,7 @@ export default function InventoryDialog({
           {
             !!dialogDescription && <DialogContentText>{dialogDescription}</DialogContentText>
           }
+          <Dropzone onFileUpload={onFileUpload} clearFile={clearFile} />
           <TextField
             className={classes.name}
             required

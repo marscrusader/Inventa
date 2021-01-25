@@ -61,6 +61,8 @@ export interface InventoryDialogInterface {
   onCancelClick: React.MouseEventHandler<HTMLButtonElement>;
   addNewCategory: () => void;
   addNewStatus: () => void;
+  onFileUpload: (file: File) => void;
+  clearFile: () => void;
 }
 
 export interface InventoryDialogStateInterface {
@@ -79,6 +81,7 @@ export interface InventoryDialogStateInterface {
   showDialog: boolean;
   submitButtonLoading: boolean;
   submitButtonDisabled: boolean;
+  image?: File;
 }
 
 export enum InventoryFormFieldIds {

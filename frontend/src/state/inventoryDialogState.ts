@@ -24,7 +24,7 @@ export const useInventoryDialogState = (): [
     submitButtonText: '',
     showDialog: false,
     submitButtonLoading: false,
-    submitButtonDisabled: false,
+    submitButtonDisabled: false
   })
 
   const setInventoryDialogState = (state: InventoryDialogStateInterface) => {
