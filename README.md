@@ -18,6 +18,7 @@ Step 2 and 3 are only required to run the first time you start the project, or w
 
 ### Add Package
 Stop docker-compose first, `docker-compose down`.
+
 If you want to add a package for the client side:
 1. `cd frontend`
 2. `yarn add <package>`
