@@ -59,3 +59,5 @@ sequelize
   .catch(err => {
     logger.error('Unable to connect to the database:', err);
   });
+
+export default app
