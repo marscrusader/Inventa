@@ -36,8 +36,7 @@ const InventoryModel: InventoryStatic = SequelizeSetup.define('inventories', {
     type: DataTypes.TEXT
   },
   serialNumber: {
-    type: DataTypes.TEXT,
-    unique: true
+    type: DataTypes.TEXT
   },
   status: {
     type: DataTypes.STRING(50)

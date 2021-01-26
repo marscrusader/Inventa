@@ -13,6 +13,7 @@ import { InventoryComponentProps } from '../../interfaces/inventory';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined'
 import EmptyImage from '../../static/empty.jpg'
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import { format } from 'date-fns'
 
 
 const columns = [
@@ -84,7 +85,7 @@ const columns = [
     name: "created_at",
     label: "Created At",
     options: {
-      sort: false,
+
       filter: false
     }
   }
@@ -181,7 +182,7 @@ export default function Inventories({ inventoriesState, deleteInventories, openC
     status: inventory.status ? inventory.status : '-',
     cost: inventory.cost,
     salePrice: inventory.salePrice,
-    created_at: inventory.created_at
+    created_at: format(new Date(inventory.created_at), 'dd-MM-yyyy h:mm aaaa')
   }))
 
   const tableTitle = () => {

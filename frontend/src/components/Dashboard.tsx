@@ -249,6 +249,7 @@ export default function Dashboard(): JSX.Element {
         throw 'Collection id missing'
       }
       const { inventoryId, inventoryName, inventoryDescription, category, quantity, status, image, serialNumber, cost, salePrice } = inventoryDialogState
+      console.log(image)
       await Promise.all(
         [
           updateInventory(token, {
@@ -530,8 +531,16 @@ export default function Dashboard(): JSX.Element {
     setInventoryDialogState({
       ...inventoryDialogState,
       image: undefined,
-      s3Id: ''
+      s3Id: undefined
     })
+    // TODO: update inventoriesState s3Id to undefined where id matches
+    setInventoriesState(
+      inventoriesState.map(inventory =>
+        inventory.id === inventoryDialogState.inventoryId
+          ? { ...inventory, s3Id: undefined }
+          : inventory
+      )
+    )
     // Means only update if created before
     if (inventoryDialogState.inventoryId) {
       const token = await getAccessToken()

@@ -22,7 +22,7 @@ CREATE TABLE inventa.inventories
   "collectionId" integer NOT NULL,
   "s3Id" text,
   "s3ThumbnailId" text,
-  "serialNumber" text UNIQUE,
+  "serialNumber" text,
   "status" character varying(50),
   "cost" integer,
   "salePrice" integer,

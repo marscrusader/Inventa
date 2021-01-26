@@ -8,7 +8,7 @@ export interface InventoryResponse {
   cost: number;
   salePrice: number;
   quantity: number;
-  s3Id: string;
+  s3Id?: string;
   created_at: Date;
   category: string;
   s3ThumbnailId: string;
