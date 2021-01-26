@@ -100,6 +100,7 @@ export default function InventoryDialog({
     category,
     status,
     cost,
+    s3Id,
     salePrice,
     serialNumber,
     submitButtonDisabled,
@@ -115,7 +116,7 @@ export default function InventoryDialog({
           {
             !!dialogDescription && <DialogContentText>{dialogDescription}</DialogContentText>
           }
-          <Dropzone onFileUpload={onFileUpload} clearFile={clearFile} />
+          <Dropzone previewUrl={s3Id} onFileUpload={onFileUpload} clearFile={clearFile} />
           <TextField
             className={classes.name}
             required

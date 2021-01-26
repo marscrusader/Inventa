@@ -13,10 +13,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
+      DEMO VERSION&nbsp;
       {new Date().getFullYear()}
       {'.'}
     </Typography>

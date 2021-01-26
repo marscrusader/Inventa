@@ -149,7 +149,7 @@ export default function Inventories({ inventoriesState, deleteInventories, openC
       // rowData returns an array of string (the row datas)
       const selectedInventory = inventoriesState.find(inventory => inventory.id === +rowData[0])
       if (selectedInventory) {
-        const { id, name, description, category, quantity, status, cost, salePrice, serialNumber } = selectedInventory
+        const { id, name, description, category, quantity, status, cost, salePrice, serialNumber, s3Id } = selectedInventory
         openUpdateInventoryDialog({
           dialogTitle: 'Update inventory',
           dialogDescription: '',
@@ -164,6 +164,7 @@ export default function Inventories({ inventoriesState, deleteInventories, openC
           cost,
           salePrice,
           serialNumber,
+          s3Id,
           submitButtonLoading: false,
           submitButtonDisabled: false
         })

@@ -82,6 +82,7 @@ export interface InventoryDialogStateInterface {
   submitButtonLoading: boolean;
   submitButtonDisabled: boolean;
   image?: File;
+  s3Id?: string;
 }
 
 export enum InventoryFormFieldIds {
@@ -92,5 +93,6 @@ export enum InventoryFormFieldIds {
   STATUS = 'status',
   COST = 'cost',
   SALE_PRICE = 'salePrice',
-  SERIAL_NUMBER = 'serialNumber'
+  SERIAL_NUMBER = 'serialNumber',
+  IMAGE = 'image'
 }

@@ -56,11 +56,11 @@ const useStyles = makeStyles((_theme) => ({
   }
 }))
 
-export default function CustomDropzone({ onFileUpload, clearFile }: DropzonePropsInterface): JSX.Element {
+export default function CustomDropzone({ onFileUpload, clearFile, previewUrl }: DropzonePropsInterface): JSX.Element {
   const classes = useStyles()
   const [file, setFile] = useState(null as unknown as File)
-  const [previewSrc, setPreviewSrc] = useState('')
-  const [isPreviewAvailable, setIsPreviewAvailable] = useState(false)
+  const [previewSrc, setPreviewSrc] = useState(previewUrl ? previewUrl : '')
+  const [isPreviewAvailable, setIsPreviewAvailable] = useState(previewUrl ? true : false)
   const dropRef = useRef()
 
   const onDrop = (files: File[]) => {
@@ -132,7 +132,7 @@ export default function CustomDropzone({ onFileUpload, clearFile }: DropzoneProp
           )}
       </div>
       {
-        file &&
+        (file || previewSrc) &&
         <div className={classes.removeButton}>
           <Button
             variant="contained"

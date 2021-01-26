@@ -7,7 +7,6 @@ import {
   Container,
   Grid,
   Paper,
-  Link,
   LinearProgress,
   Button
 } from '@material-ui/core'
@@ -30,7 +29,7 @@ import { useCollectionDialogState } from '../state/collectionDialogState'
 import { useUserState } from '../state/user'
 import AppBar from './AppBar'
 import Drawer from './Drawer'
-import { createInventory, deleteInventory, listInventories, updateInventory } from '../services/inventory'
+import { createInventory, deleteInventory, listInventories, updateInventory, uploadS3File, deleteFile } from '../services/inventory'
 import { InventoryResponse } from '../interfaces/inventory'
 import InventoryDialog from './inventory/InventoryDialog'
 import { useInventoryDialogState } from '../state/inventoryDialogState'
@@ -47,10 +46,7 @@ import { useStatusDialogState } from '../state/statusDialogState'
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
+      DEMO VERSION&nbsp;
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -185,6 +181,14 @@ export default function Dashboard(): JSX.Element {
       setPageLoadingState(false)
     }
   }
+  const uploadS3 = async (token: string, inventoryId: number, image: File) => {
+    try {
+      return (await uploadS3File(token, inventoryId, image))
+    } catch (error) {
+      Logger.error('Failed to upload file', error)
+      throw 'Failed to upload file'
+    }
+  }
   const addNewInventory = async () => {
     setInventoryDialogState({
       ...inventoryDialogState,
@@ -199,8 +203,8 @@ export default function Dashboard(): JSX.Element {
       if (!collectionId) {
         throw 'Collection id missing'
       }
-      const { inventoryName, inventoryDescription, category, quantity, status, serialNumber, cost, salePrice } = inventoryDialogState
-      await createInventory(token, {
+      const { inventoryName, inventoryDescription, category, quantity, status, serialNumber, cost, salePrice, image } = inventoryDialogState
+      const inventoryId = await createInventory(token, {
         collectionId,
         name: inventoryName,
         description: inventoryDescription,
@@ -211,22 +215,23 @@ export default function Dashboard(): JSX.Element {
         cost,
         salePrice
       })
+      if (image) await uploadS3(token, inventoryId, image)
       getInventories(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
         message: 'Inventory created.',
         theme: 'success'
       })
+      closeInventoryDialog()
     } catch (addInventoryError) {
       Logger.error('[ADD_INVENTORY] Failed to add new inventory', addInventoryError)
-      setDialogError()
-    } finally {
       setInventoryDialogState({
         ...inventoryDialogState,
         showDialog: false,
         submitButtonLoading: false,
         submitButtonDisabled: false
       })
+      setDialogError()
     }
   }
   const updateSelectedInventory = async () => {
@@ -243,18 +248,24 @@ export default function Dashboard(): JSX.Element {
       if (!collectionId) {
         throw 'Collection id missing'
       }
-      const { inventoryId, inventoryName, inventoryDescription, category, quantity, status, serialNumber, cost, salePrice } = inventoryDialogState
-      await updateInventory(token, {
-        id: inventoryId,
-        name: inventoryName,
-        description: inventoryDescription,
-        category,
-        quantity,
-        serialNumber,
-        status,
-        cost,
-        salePrice
-      })
+      const { inventoryId, inventoryName, inventoryDescription, category, quantity, status, image, serialNumber, cost, salePrice } = inventoryDialogState
+      await Promise.all(
+        [
+          updateInventory(token, {
+            id: inventoryId,
+            name: inventoryName,
+            description: inventoryDescription,
+            category,
+            quantity,
+            serialNumber,
+            status,
+            cost,
+            salePrice
+          }),
+          image && uploadS3(token, inventoryId, image)
+        ]
+      )
+      closeInventoryDialog()
       getInventories(collectionId, token)
       setSnackbarState({
         showSnackbar: true,
@@ -263,14 +274,13 @@ export default function Dashboard(): JSX.Element {
       })
     } catch (updateError) {
       Logger.error(`[UPDATE_INVENTORY] Failed to update inventory with id ${inventoryDialogState.inventoryId}`, updateError)
-      setDialogError()
-    } finally {
       setInventoryDialogState({
         ...inventoryDialogState,
         showDialog: false,
         submitButtonLoading: false,
         submitButtonDisabled: false
       })
+      setDialogError()
     }
   }
   const deleteInventories = async (inventoryIds: number[]) => {
@@ -510,18 +520,23 @@ export default function Dashboard(): JSX.Element {
   }
 
   const onFileUpload = (file: File) => {
-    console.log(file)
     setInventoryDialogState({
       ...inventoryDialogState,
       image: file
     })
   }
 
-  const clearFile = () => {
+  const clearFile = async () => {
     setInventoryDialogState({
       ...inventoryDialogState,
-      image: undefined
+      image: undefined,
+      s3Id: ''
     })
+    // Means only update if created before
+    if (inventoryDialogState.inventoryId) {
+      const token = await getAccessToken()
+      deleteFile(token, inventoryDialogState.inventoryId)
+    }
   }
 
   return (

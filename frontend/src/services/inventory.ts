@@ -22,7 +22,7 @@ export const findInventory = async (token: string, inventoryId: number): Promise
   })).data
 }
 
-export const createInventory = async (token: string, data: CreateInventoryRequest): Promise<AxiosResponse> => {
+export const createInventory = async (token: string, data: CreateInventoryRequest): Promise<number> => {
   return (await ApiClient({
     method: 'POST',
     url: '/inventory/create',
@@ -30,7 +30,7 @@ export const createInventory = async (token: string, data: CreateInventoryReques
       Authorization: `Bearer ${token}`
     },
     data
-  }))
+  })).data.id
 }
 
 export const updateInventory = async (token: string, data: UpdateInventoryRequest): Promise<AxiosResponse> => {
@@ -48,6 +48,30 @@ export const deleteInventory = async (token: string, inventoryId: number): Promi
   return (await ApiClient({
     method: 'DELETE',
     url: `/inventory/delete/${inventoryId}`,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }))
+}
+
+export const uploadS3File = async (token: string, inventoryId: number, image: File): Promise<AxiosResponse> => {
+  const bodyFormData = new FormData()
+  bodyFormData.append('inventory', image)
+  return (await ApiClient({
+    method: 'POST',
+    url: `/file/upload/${inventoryId}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
+    },
+    data: bodyFormData
+  }))
+}
+
+export const deleteFile = async (token: string, inventoryId: number): Promise<AxiosResponse> => {
+  return (await ApiClient({
+    method: 'DELETE',
+    url: `/file/delete/${inventoryId}`,
     headers: {
       Authorization: `Bearer ${token}`
     }

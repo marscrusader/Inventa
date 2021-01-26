@@ -125,11 +125,11 @@ export default class InventoryController extends BaseController {
         salePrice
       })
       logger.info('[CREATE_INVENTORY] Successfully created inventory with id=', inventory.id)
+      return this.ok(res, { id: inventory.id })
     } catch (createError) {
       logger.error(`[CREATE_INVENTORY] Failed to create inventory for collectionId=${collectionId}`, createError)
       return this.internalServerError(res)
     }
-    return this.ok(res)
   }
   // END - create inventory
 

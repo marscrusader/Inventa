@@ -2,40 +2,42 @@ import { useState } from "react"
 import { InventoryDialogStateInterface, InventoryFormFieldIds } from "../interfaces/inventory"
 
 
+const initState: InventoryDialogStateInterface = {
+  dialogTitle: '',
+  dialogDescription: '',
+  inventoryName: '',
+  inventoryId: 0,
+  inventoryDescription: '',
+  category: '',
+  quantity: 1,
+  status: '',
+  cost: 0,
+  salePrice: 0,
+  serialNumber: '',
+  submitButtonText: '',
+  showDialog: false,
+  submitButtonLoading: false,
+  submitButtonDisabled: false,
+  s3Id: undefined,
+  image: undefined
+}
+
 export const useInventoryDialogState = (): [
   InventoryDialogStateInterface,
   (state: InventoryDialogStateInterface) => void,
   () => void,
   () => void,
-  (key: InventoryFormFieldIds, value: string | number) => void
+  (key: InventoryFormFieldIds, value: string | number) => void,
+  (image: File) => void,
 ] => {
-  const [inventoryDialogState, _setInventoryDialogState] = useState({
-    dialogTitle: '',
-    dialogDescription: '',
-    inventoryName: '',
-    inventoryId: 0,
-    inventoryDescription: '',
-    category: '',
-    quantity: 1,
-    status: '',
-    cost: 0,
-    salePrice: 0,
-    serialNumber: '',
-    submitButtonText: '',
-    showDialog: false,
-    submitButtonLoading: false,
-    submitButtonDisabled: false
-  })
+  const [inventoryDialogState, _setInventoryDialogState] = useState(initState)
 
   const setInventoryDialogState = (state: InventoryDialogStateInterface) => {
     _setInventoryDialogState(state)
   }
 
   const closeInventoryDialog = () => {
-    _setInventoryDialogState({
-      ...inventoryDialogState,
-      showDialog: false
-    })
+    _setInventoryDialogState(initState)
   }
 
   const openCreateInventoryDialog = () => {
@@ -104,6 +106,13 @@ export const useInventoryDialogState = (): [
     })
   }
 
+  const onInventoryImageChange = (image: File) => {
+    _setInventoryDialogState({
+      ...inventoryDialogState,
+      image
+    })
+  }
+
   const onInventoryFormChange = (key: InventoryFormFieldIds, value: string | number) => {
     // This way we don't have to pass a lot of callback functions as props to InventoryDialog
     switch (key) {
@@ -146,6 +155,7 @@ export const useInventoryDialogState = (): [
     setInventoryDialogState,
     openCreateInventoryDialog,
     closeInventoryDialog,
-    onInventoryFormChange
+    onInventoryFormChange,
+    onInventoryImageChange
   ]
 }
