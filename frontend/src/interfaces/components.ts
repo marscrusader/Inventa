@@ -7,6 +7,7 @@ export interface AppDrawerInterface {
   collectionsState: CollectionStateInterface[];
   setCollectionsState: Dispatch<SetStateAction<CollectionStateInterface[]>>;
   getInventories: (collectionId: number) => void;
+  openCreateCollectionDialog: () => void;
   handleDrawerClose: () => void;
   onLogoutClick: () => void;
 }

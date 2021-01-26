@@ -210,6 +210,7 @@ export default function InventoryDialog({
               id={InventoryFormFieldIds.COST}
               label="Cost"
               type="number"
+              helperText="Up to 2 decimal places"
               value={cost}
               onChange={(e) => onInventoryFormChange(InventoryFormFieldIds.COST, e.target.value)}
             />
@@ -219,6 +220,7 @@ export default function InventoryDialog({
               autoFocus
               id={InventoryFormFieldIds.SALE_PRICE}
               label="Sale Price"
+              helperText="Up to 2 decimal places"
               type="number"
               value={salePrice}
               onChange={(e) => onInventoryFormChange(InventoryFormFieldIds.SALE_PRICE, e.target.value)}

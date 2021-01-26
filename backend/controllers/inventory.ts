@@ -148,7 +148,8 @@ export default class InventoryController extends BaseController {
           id
         }
       })
-      logger.info('[DELETE_ERROR] Successfully deleted inventory with id=', id)
+      logger.info('[DELETE_INVENTORY] Successfully deleted inventory with id=', id)
+      return this.ok(res)
     } catch (deleteError) {
       logger.error(`[DELETE_ERROR] Failed to delete inventory with id=${id}`, deleteError)
       return this.internalServerError(res)

@@ -167,7 +167,12 @@ export default function Dashboard(): JSX.Element {
     // 2) Use token to get list of inventories for selected collection
     try {
       const inventories = await listInventories(token, collectionId)
-      setInventoriesState(inventories)
+      setInventoriesState(inventories.map(inventory => ({
+        ...inventory,
+        // convert from cents to integer with decimals
+        cost: inventory.cost / 100,
+        salePrice: inventory.salePrice / 100
+      })))
     } catch (inventoriesError) {
       Logger.error('[LIST_INVENTORIES] Failed to get list of inventories for collectionId=', collectionId)
       setDialogState({
@@ -212,8 +217,9 @@ export default function Dashboard(): JSX.Element {
         quantity,
         serialNumber,
         status,
-        cost,
-        salePrice
+        // convert to cents
+        cost: cost * 100,
+        salePrice: salePrice * 100
       })
       if (image) await uploadS3(token, inventoryId, image)
       getInventories(collectionId, token)
@@ -260,8 +266,9 @@ export default function Dashboard(): JSX.Element {
             quantity,
             serialNumber,
             status,
-            cost,
-            salePrice
+            // convert to cents
+            cost: cost * 100,
+            salePrice: salePrice * 100
           }),
           image && uploadS3(token, inventoryId, image)
         ]
@@ -286,7 +293,10 @@ export default function Dashboard(): JSX.Element {
   }
   const deleteInventories = async (inventoryIds: number[]) => {
     const token = await getAccessToken()
+    // delete s3 files
+    inventoryIds.map(id => deleteFile(token, id))
     try {
+      // delete from db
       await Promise.all(inventoryIds.map(id => deleteInventory(token, id)))
       setSnackbarState({
         showSnackbar: true,
@@ -566,6 +576,7 @@ export default function Dashboard(): JSX.Element {
         getInventories={getInventories}
         handleDrawerClose={handleDrawerClose}
         onLogoutClick={() => { logout() }}
+        openCreateCollectionDialog={() => openCreateCollectionDialog()}
       />
       <main className={classes.content}>
         <SimpleDialog

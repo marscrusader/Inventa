@@ -85,17 +85,19 @@ export const useInventoryDialogState = (): [
     })
   }
 
-  const onInventoryCostChange = (cost: number) => {
+  const onInventoryCostChange = (cost: number | string) => {
+    console.log(cost)
+    console.log(typeof cost)
     _setInventoryDialogState({
       ...inventoryDialogState,
-      cost
+      cost: parseFloat((typeof cost === 'string' ? parseFloat(cost) : cost).toFixed(2))
     })
   }
 
   const onInventorySalePriceChange = (salePrice: number) => {
     _setInventoryDialogState({
       ...inventoryDialogState,
-      salePrice
+      salePrice: parseFloat((typeof salePrice === 'string' ? parseFloat(salePrice) : salePrice).toFixed(2))
     })
   }
 
