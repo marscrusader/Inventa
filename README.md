@@ -13,6 +13,7 @@
 3. `docker-compose build web`
 
 Step 2 and 3 are only required to run the first time you start the project, or whenever you add a new package.
+
 4. `docker-compose up`
 
 ### Add Package
