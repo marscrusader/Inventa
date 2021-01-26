@@ -32,11 +32,12 @@ const secondCollection: CollectionAttributes = {
 }
 
 describe('Collections', async () => {
-  beforeAll(async () => {
+  beforeAll(async (done) => {
     await dbConnection.authenticate()
     console.log('connected')
     await UserModel.create(user)
     await CollectionModel.create(collection)
+    done()
   })
 
   it('should get all collections', async (done) => {
