@@ -11,6 +11,7 @@
 1. `cd` in to project directory where the `docker-compose.yml` file is. There are no seperate (dev/production) compose files for this project.
 2. `docker-compose build api`
 3. `docker-compose build web`
+
 Step 2 and 3 are only required to run the first time you start the project, or whenever you add a new package.
 4. `docker-compose up`
 
