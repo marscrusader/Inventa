@@ -46,6 +46,7 @@ export interface UpdateInventoryRequest {
 
 export interface InventoryComponentProps {
   inventoriesState: InventoryResponse[];
+  collectionName: string;
   deleteInventories: (ids: number[]) => void;
   openCreateInventoryDialog: () => void;
   openUpdateInventoryDialog: (state: InventoryDialogStateInterface) => void;

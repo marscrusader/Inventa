@@ -122,7 +122,7 @@ const useTableStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Inventories({ inventoriesState, deleteInventories, openCreateInventoryDialog, openUpdateInventoryDialog }: InventoryComponentProps): JSX.Element {
+export default function Inventories({ inventoriesState, collectionName, deleteInventories, openCreateInventoryDialog, openUpdateInventoryDialog }: InventoryComponentProps): JSX.Element {
   const classes = useTableStyles()
 
   const customToolbarIcon = () => {
@@ -189,7 +189,7 @@ export default function Inventories({ inventoriesState, deleteInventories, openC
     return (
       <div className={classes.titleWrapper}>
         <Typography className={classes.mainTitle} component="span" variant="h5" color="primary" noWrap>
-          <span>AstraZenga</span>
+          <span>{collectionName}</span>
         </Typography>
         <Divider orientation="vertical" flexItem />
         <Typography className={classes.subTitle} component="span" variant="subtitle1" noWrap>

@@ -143,6 +143,7 @@ export default function Dashboard(): JSX.Element {
     }
   }
   const getSelectedCollectionId = () => collectionsState.find(collection => collection.selected)?.id
+  const getSelectedCollectionName = () => collectionsState.find(collection => collection.selected)?.name || 'Collection'
   // END - Collections state
 
   // START - Inventories state
@@ -522,6 +523,7 @@ export default function Dashboard(): JSX.Element {
     }
     return (
       <Inventories
+        collectionName={getSelectedCollectionName()}
         openUpdateInventoryDialog={setInventoryDialogState}
         openCreateInventoryDialog={openCreateInventoryDialog}
         inventoriesState={inventoriesState}
