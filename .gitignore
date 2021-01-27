@@ -8,6 +8,8 @@ postgres_data
 /frontend/.eslintcache
 /.pnp
 .pnp.js
+/dist
+/backend/dist
 
 # testing
 /coverage
