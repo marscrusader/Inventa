@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  demoText: {
+    fontWeight: 'bold'
+  }
 }))
 
 export default function SignInSide(): JSX.Element {
@@ -75,6 +78,17 @@ export default function SignInSide(): JSX.Element {
             >
               Sign In
             </Button>
+            <span>
+              <span className={classes.demoText}>Demo User:&nbsp;</span>
+              <span>x86@example.com</span>
+            </span>
+            <span>
+              <span className={classes.demoText}>Demo Password:&nbsp;</span>
+              <span>Abcd123$</span>
+            </span>
+            <Typography component="span" variant="caption" color="inherit" align="center">
+              <span>I have provided a demo user above, or you can optionally create your own in sign up.</span>
+            </Typography>
             <Box mt={5} mb={5} width='100%'>
               <Divider />
             </Box>

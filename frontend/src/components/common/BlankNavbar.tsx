@@ -32,7 +32,7 @@ export default function BlankNavbar(): JSX.Element {
           <a href='/' className={classes.linkTag}>Inventa</a>
         </Typography>
         <Typography component="h1" variant={isMobile() ? "caption" : "subtitle1"} color="inherit" noWrap>
-          <span>CLOUD INVENTORY MANAGEMENT PLATFORM</span>
+          <span>INVENTORY MANAGEMENT PLATFORM (MVP)</span>
         </Typography>
       </Toolbar>
     </AppBar>
