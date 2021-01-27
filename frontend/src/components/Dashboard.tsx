@@ -311,6 +311,7 @@ export default function Dashboard(): JSX.Element {
         message: inventoryIds.length > 1 ? 'Error deleting inventories, please try again.' : 'Error deleting inventory, please try again.',
         theme: 'error'
       })
+    } finally {
       const collectionId = getSelectedCollectionId()
       if (!collectionId) return
       getInventories(collectionId, token)
