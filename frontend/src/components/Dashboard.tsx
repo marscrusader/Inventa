@@ -256,7 +256,6 @@ export default function Dashboard(): JSX.Element {
         throw 'Collection id missing'
       }
       const { inventoryId, inventoryName, inventoryDescription, category, quantity, status, image, serialNumber, cost, salePrice } = inventoryDialogState
-      console.log(image)
       await Promise.all(
         [
           updateInventory(token, {
@@ -577,6 +576,8 @@ export default function Dashboard(): JSX.Element {
         collectionsState={collectionsState}
         setCollectionsState={setCollectionsState}
         getInventories={getInventories}
+        getCategoriesList={getCategoriesList}
+        getStatusList={getStatusList}
         handleDrawerClose={handleDrawerClose}
         onLogoutClick={() => { logout() }}
         openCreateCollectionDialog={() => openCreateCollectionDialog()}

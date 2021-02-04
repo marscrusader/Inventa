@@ -15,7 +15,7 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import { AppDrawerInterface } from "../interfaces/components"
 
 
-export default function AppDrawer({ classes, open, collectionsState, setCollectionsState, openCreateCollectionDialog, getInventories, handleDrawerClose, onLogoutClick }: AppDrawerInterface): JSX.Element {
+export default function AppDrawer({ classes, open, collectionsState, setCollectionsState, openCreateCollectionDialog, getInventories, getCategoriesList, getStatusList, handleDrawerClose, onLogoutClick }: AppDrawerInterface): JSX.Element {
   const handleOnCollectionClick = (collectionId: number, collectionIsSelected: boolean) => {
     // Don't load inventories again if already selected
     if (collectionIsSelected) return
@@ -33,6 +33,8 @@ export default function AppDrawer({ classes, open, collectionsState, setCollecti
 
     // 4) Update inventories table
     getInventories(collectionId)
+    getCategoriesList(collectionId)
+    getStatusList(collectionId)
   }
 
   return (
